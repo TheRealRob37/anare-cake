@@ -1,13 +1,14 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { useCakeStore } from "@/store/cakeStore";
 import { useI18n } from "@/lib/i18n";
-import { formatAMD } from "@/types/cake";
+import { formatAMD, PriceBreakdown, CakeConfig } from "@/types/cake";
 
 export default function PriceCalculator() {
-  const price = useCakeStore((s) => s.price);
-  const config = useCakeStore((s) => s.config);
+  const price = useCakeStore((s: { price: PriceBreakdown }) => s.price);
+  const config = useCakeStore((s: { config: CakeConfig }) => s.config);
   const { t } = useI18n();
 
   const rows: { key: keyof typeof price; label: string }[] = [
@@ -32,7 +33,7 @@ export default function PriceCalculator() {
           if (val === 0) return null;
           return (
             <motion.div
-              key={key}
+              key={key as string}
               layout
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
@@ -69,14 +70,9 @@ export default function PriceCalculator() {
       </p>
 
       {/* Order CTA */}
-      <a
-        href={`https://instagram.com/anare_cake`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn-gold w-full justify-center"
-      >
+      <Link href="/checkout" className="btn-gold w-full justify-center">
         {t.configurator.order} →
-      </a>
+      </Link>
     </div>
   );
 }

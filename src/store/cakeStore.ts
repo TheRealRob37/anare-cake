@@ -157,14 +157,14 @@ export const selectInternalLayers = (config: CakeConfig) => {
   const fillingsData = config.fillings.map((id) => FILLINGS.find((f) => f.id === id)!);
 
   // Build cross-section from bottom to top
-  layers.push({ type: "sponge" as const,   color: spongeData.color,   label: spongeData.label,   heightPx: 40 });
+  layers.push({ type: "sponge" as const,   color: spongeData.color,   label: spongeData.label.en,   heightPx: 40 });
   fillingsData.forEach((f) => {
     if (f) {
-      layers.push({ type: "filling" as const,  color: f.color,            label: f.label,            heightPx: 24 });
-      layers.push({ type: "sponge"  as const,  color: spongeData.color,   label: spongeData.label,   heightPx: 40 });
+      layers.push({ type: "filling" as const,  color: f.color,            label: f.label.en,            heightPx: 24 });
+      layers.push({ type: "sponge"  as const,  color: spongeData.color,   label: spongeData.label.en,   heightPx: 40 });
     }
   });
-  layers.push({ type: "frosting" as const, color: frostingData.color, label: frostingData.label, heightPx: 16 });
+  layers.push({ type: "frosting" as const, color: frostingData.color, label: frostingData.label.en, heightPx: 16 });
 
   return layers;
 };

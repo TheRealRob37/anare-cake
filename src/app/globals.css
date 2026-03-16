@@ -125,6 +125,14 @@ h1, h2, h3, h4, h5 {
   .glass {
     @apply bg-white/40 backdrop-blur-md border border-white/60;
   }
+
+  /* Form field input */
+  .field-input {
+    @apply w-full px-4 py-2.5 rounded-2xl border-2 border-cream-200
+           bg-cream-50 text-sm text-ink-900 placeholder-ink-300
+           focus:outline-none focus:border-gold-300 focus:ring-0
+           transition-colors duration-200;
+  }
 }
 
 /* ─── Noise texture overlay ──────────────────────────────────── */

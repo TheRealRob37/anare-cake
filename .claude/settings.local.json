@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git --force)",
+      "Bash(npm install:*)",
+      "Bash(grep -n \"whileTap\\\\|whileHover\" /d/anare-cake/src/components/configurator/*.tsx /d/anare-cake/src/components/home/*.tsx)",
+      "Bash(grep -n \"divider-gold\\\\|label-section\" /d/anare-cake/src/components/**/*.tsx)",
+      "Bash(grep -n \"flex items-center justify-center gap-3\\\\|divider-gold\\\\|label-section\" /d/anare-cake/src/components/home/*.tsx)",
+      "Bash(grep -n \"const.*LANGS\\\\|const.*SHAPES\\\\|const.*TABS\\\\|const.*CAKES\" /d/anare-cake/src/components/**/*.tsx)",
+      "Bash(grep -n \"transition=.*duration.*0\\\\.\" /d/anare-cake/src/components/**/*.tsx)",
+      "Bash(grep -n \"ease: \\\\[0.22, 1, 0.36, 1\\\\]\" /d/anare-cake/src/components/**/*.tsx)",
+      "Bash(grep -n \"^function Section\\\\|card-cream.*p-\" /d/anare-cake/src/components/**/*.tsx)",
+      "Bash(grep -n \"border-gold-300 bg-gold-100 shadow-soft\" /d/anare-cake/src/components/configurator/*.tsx)",
+      "Bash(grep -A 3 \"flex items-baseline justify-between\" /d/anare-cake/src/components/configurator/*.tsx)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}
