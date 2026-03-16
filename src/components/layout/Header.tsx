@@ -4,18 +4,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/cn";
-
-const NAV_LINKS = [
-  { href: "/",            label: "Home"        },
-  { href: "/menu",        label: "Our Cakes"   },
-  { href: "/configurator",label: "Design Yours"},
-  { href: "/about",       label: "Our Story"   },
-  { href: "/contact",     label: "Contact"     },
-];
+import { useI18n } from "@/lib/i18n";
+import LanguageSwitcher from "@/components/configurator/LanguageSwitcher";
 
 export default function Header() {
-  const [scrolled,    setScrolled]    = useState(false);
-  const [mobileOpen,  setMobileOpen]  = useState(false);
+  const [scrolled,   setScrolled]   = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useI18n();
+
+  const NAV_LINKS = [
+    { href: "/",             label: t.nav.home    },
+    { href: "/menu",         label: t.nav.cakes   },
+    { href: "/configurator", label: t.nav.design  },
+    { href: "/about",        label: t.nav.story   },
+    { href: "/contact",      label: t.nav.contact },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -36,9 +39,9 @@ export default function Header() {
             : "bg-transparent"
         )}
       >
-        <div className="container-site h-16 flex items-center justify-between">
+        <div className="container-site h-16 flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="group flex flex-col leading-none">
+          <Link href="/" className="group flex flex-col leading-none flex-shrink-0">
             <span className="font-display text-xl font-semibold text-ink-900 tracking-tight group-hover:text-gold-400 transition-colors duration-300">
               Anare
             </span>
@@ -48,7 +51,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -65,29 +68,30 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setMobileOpen((v) => !v)}
-            className="md:hidden flex flex-col gap-1.5 p-2"
-            aria-label="Toggle menu"
-          >
-            {[0, 1, 2].map((i) => (
-              <motion.span
-                key={i}
-                animate={{
-                  rotate: mobileOpen
-                    ? i === 0 ? 45 : i === 2 ? -45 : 0
-                    : 0,
-                  y:      mobileOpen
-                    ? i === 0 ? 8 : i === 2 ? -8 : 0
-                    : 0,
-                  opacity: mobileOpen && i === 1 ? 0 : 1,
-                }}
-                transition={{ duration: 0.25 }}
-                className="block h-0.5 w-5 bg-ink-700 rounded-full origin-center"
-              />
-            ))}
-          </button>
+          {/* Right side: language switcher + mobile toggle */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <LanguageSwitcher className="hidden sm:flex" />
+
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileOpen((v) => !v)}
+              className="md:hidden flex flex-col gap-1.5 p-2"
+              aria-label="Toggle menu"
+            >
+              {[0, 1, 2].map((i) => (
+                <motion.span
+                  key={i}
+                  animate={{
+                    rotate:  mobileOpen ? (i === 0 ? 45 : i === 2 ? -45 : 0) : 0,
+                    y:       mobileOpen ? (i === 0 ? 8  : i === 2 ? -8  : 0) : 0,
+                    opacity: mobileOpen && i === 1 ? 0 : 1,
+                  }}
+                  transition={{ duration: 0.25 }}
+                  className="block h-0.5 w-5 bg-ink-700 rounded-full origin-center"
+                />
+              ))}
+            </button>
+          </div>
         </div>
       </motion.header>
 
@@ -102,6 +106,11 @@ export default function Header() {
             className="fixed inset-x-0 top-16 z-40 bg-cream-50/95 backdrop-blur-xl border-b border-cream-200 shadow-card md:hidden"
           >
             <nav className="container-site py-6 flex flex-col gap-1">
+              {/* Language switcher in mobile menu */}
+              <div className="flex justify-center mb-4">
+                <LanguageSwitcher />
+              </div>
+
               {NAV_LINKS.map((link, i) => (
                 <motion.div
                   key={link.href}
