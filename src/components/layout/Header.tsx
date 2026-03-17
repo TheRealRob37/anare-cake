@@ -40,15 +40,15 @@ export default function Header() {
             : "bg-transparent"
         )}
       >
-        <div className="container-site h-16 flex items-center justify-between gap-4">
-          {/* Logo */}
-          <Link href="/" className="group flex-shrink-0" aria-label="Anare Cake — Home">
-            <div className="h-10 w-auto overflow-hidden rounded-xl border border-cream-200 shadow-sm transition-transform duration-300 group-hover:scale-105">
-              <Image src="/logo.jpg" alt="Anare Cake" width={80} height={40} className="h-full w-auto object-cover" />
+        <div className="container-site h-20 flex items-center justify-between gap-4">
+          {/* Logo — fixed width so nav stays truly centered */}
+          <Link href="/" className="group flex-shrink-0 w-32" aria-label="Anare Cake — Home">
+            <div className="h-14 w-14 overflow-hidden rounded-2xl border border-cream-200 shadow-sm transition-transform duration-300 group-hover:scale-105">
+              <Image src="/logo.jpg" alt="Anare Cake" width={56} height={56} className="h-full w-full object-cover" />
             </div>
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop Nav — centered because both sides are w-32 */}
           <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
             {NAV_LINKS.map((link) => (
               <Link
@@ -66,8 +66,8 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Right side: language switcher + mobile toggle */}
-          <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Right side: language switcher + mobile toggle — w-32 mirrors logo side */}
+          <div className="flex items-center justify-end gap-3 flex-shrink-0 w-32">
             <LanguageSwitcher className="hidden sm:flex" />
 
             {/* Mobile hamburger */}

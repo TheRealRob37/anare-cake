@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import PublicShell from "@/components/layout/PublicShell";
 import { I18nProvider } from "@/lib/i18n";
 
 export const metadata: Metadata = {
@@ -39,9 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="noise-overlay">
         <I18nProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <PublicShell>{children}</PublicShell>
         </I18nProvider>
       </body>
     </html>
