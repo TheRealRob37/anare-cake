@@ -10,6 +10,7 @@ import {
   FrostingId,
   ToppingId,
   PriceBreakdown,
+  InternalLayer,
   SPONGES,
   FILLINGS,
   FROSTINGS,
@@ -166,7 +167,7 @@ export const useCakeStore = create<CakeStore>()(
 );
 
 // ─── Derived selectors ────────────────────────────────────────────────────────
-export const selectInternalLayers = (config: CakeConfig) => {
+export const selectInternalLayers = (config: CakeConfig): InternalLayer[] => {
   const spongeData  = SPONGES.find((s) => s.id === config.sponge)!;
   const frostingData = FROSTINGS.find((f) => f.id === config.frosting)!;
 

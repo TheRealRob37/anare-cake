@@ -71,7 +71,7 @@ export default function ToppingsEngine() {
           className="flex flex-wrap gap-1.5 pt-1"
         >
           {config.toppings.map((id) => {
-            const t = TOPPINGS.find((x) => x.id === id)!;
+            const top = TOPPINGS.find((x) => x.id === id)!;
             return (
               <button
                 key={id}
@@ -81,7 +81,7 @@ export default function ToppingsEngine() {
                            hover:bg-red-50 hover:border-red-200 hover:text-red-400
                            transition-colors duration-200"
               >
-                {t.emoji} {tl(t.label)} ×
+                {top.emoji} {tl(top.label)} ×
               </button>
             );
           })}

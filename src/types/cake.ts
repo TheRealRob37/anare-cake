@@ -104,6 +104,8 @@ export interface InternalLayer {
   color: string;
   label: string;
   heightPx: number;
+  /** Optional photo of the filling cross-section — will replace solid color band when provided */
+  imageUrl?: string;
 }
 
 // ─── Main Cake Config State ───────────────────────────────────────────────────

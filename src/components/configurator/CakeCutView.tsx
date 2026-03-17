@@ -2,14 +2,16 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useCakeStore, selectInternalLayers } from "@/store/cakeStore";
+import { useI18n } from "@/lib/i18n";
 
 export default function CakeCutView() {
   const config = useCakeStore((s) => s.config);
   const layers = selectInternalLayers(config);
+  const { t } = useI18n();
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <p className="label-section">Cross-Section View</p>
+      <p className="label-section">{t.configurator.cutView}</p>
 
       {/* Cut cake container */}
       <div className="relative flex gap-2">
@@ -37,9 +39,13 @@ export default function CakeCutView() {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ delay: i * 0.05, duration: 0.3 }}
-              style={{ backgroundColor: layer.color, height: layer.heightPx }}
-              className="flex-shrink-0 w-full border-y border-white/10"
-            />
+              style={{ height: layer.heightPx, backgroundColor: layer.imageUrl ? undefined : layer.color }}
+              className="flex-shrink-0 w-full border-y border-white/10 relative overflow-hidden"
+            >
+              {layer.imageUrl && (
+                <img src={layer.imageUrl} alt={layer.label} className="absolute inset-0 w-full h-full object-cover" />
+              )}
+            </motion.div>
           ))}
         </div>
       </div>
@@ -77,10 +83,18 @@ function LayerStack({
           initial={{ opacity: 0, x: side === "left" ? -20 : 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: i * 0.06, duration: 0.35, ease: "easeOut" }}
-          style={{ backgroundColor: layer.color, height: layer.heightPx }}
-          className="w-full flex-shrink-0 border-y border-white/10"
+          style={{ height: layer.heightPx, backgroundColor: layer.imageUrl ? undefined : layer.color }}
+          className="w-full flex-shrink-0 border-y border-white/10 relative overflow-hidden"
           title={layer.label}
-        />
+        >
+          {layer.imageUrl && (
+            <img
+              src={layer.imageUrl}
+              alt={layer.label}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+        </motion.div>
       ))}
     </div>
   );

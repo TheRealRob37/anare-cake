@@ -36,6 +36,7 @@ type UIStrings = {
 
   configurator: {
     title: string; subtitle: string;
+    layers: string;
     size: string; shape: string; tiers: string;
     sponge: string; fillings: string; fillingsHint: string;
     frosting: string; toppings: string;
@@ -168,6 +169,7 @@ const STRINGS: Record<Locale, UIStrings> = {
     configurator: {
       title: "Ձևավորեք Ձեր Տորթը",
       subtitle: "Ընտրեք շերտ առ շերտ",
+      layers: "Շերտեր",
       size: "Չափ",
       shape: "Ձև",
       tiers: "Հարկ",
@@ -342,6 +344,7 @@ const STRINGS: Record<Locale, UIStrings> = {
     configurator: {
       title: "Design Your Cake",
       subtitle: "Choose layer by layer",
+      layers: "Layers",
       size: "Size",
       shape: "Shape",
       tiers: "Tiers",
@@ -516,6 +519,7 @@ const STRINGS: Record<Locale, UIStrings> = {
     configurator: {
       title: "Создайте Свой Торт",
       subtitle: "Выбирайте слой за слоем",
+      layers: "Слои",
       size: "Размер",
       shape: "Форма",
       tiers: "Ярусы",

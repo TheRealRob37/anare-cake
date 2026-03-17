@@ -1,8 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCakeStore } from "@/store/cakeStore";
 import { SPONGES, FROSTINGS, TOPPINGS } from "@/types/cake";
+import { useI18n } from "@/lib/i18n";
 import CakeCutView from "./CakeCutView";
 
 // ─── Helper: pick a display frosting color ───────────────────────────────────
@@ -16,8 +18,8 @@ function getSpongeColor(spongeId: string) {
 // ─── Cake SVG Preview ────────────────────────────────────────────────────────
 function CakeSVG() {
   const config  = useCakeStore((s) => s.config);
-  const frosting = getFrostingColor(config.frosting);
-  const sponge   = getSpongeColor(config.sponge);
+  const frosting = useMemo(() => getFrostingColor(config.frosting), [config.frosting]);
+  const sponge   = useMemo(() => getSpongeColor(config.sponge), [config.sponge]);
   const hasDrip  = config.toppings.includes("chocolate_drip") || config.toppings.includes("caramel_drip");
   const dripColor = config.toppings.includes("caramel_drip") ? "#C88A4C" : "#3E1F10";
   const hasBerries = config.toppings.includes("fresh_berries");
@@ -185,7 +187,8 @@ function CakeSVG() {
 
 // ─── Stage ────────────────────────────────────────────────────────────────────
 export default function Stage() {
-  const { config, toggleCutView, toggleRotation } = useCakeStore();
+  const { config, toggleCutView, toggleRotation, setSelectedTier } = useCakeStore();
+  const { t } = useI18n();
 
   return (
     <div className="flex flex-col items-center gap-6 h-full py-8">
@@ -199,14 +202,14 @@ export default function Stage() {
               : "bg-cream-100 text-ink-500 border-cream-200 hover:border-gold-200"
             }`}
         >
-          {config.showCutView ? "3D View" : "Cut View"}
+          {config.showCutView ? t.configurator.view3d : t.configurator.cutView}
         </button>
         <button
           onClick={toggleRotation}
           className="px-4 py-1.5 rounded-full text-xs font-medium bg-cream-100 text-ink-500
                      border border-cream-200 hover:border-gold-200 transition-all duration-200"
         >
-          {config.isRotating ? "Pause" : "Rotate"}
+          {config.isRotating ? t.configurator.pause : t.configurator.rotate}
         </button>
       </div>
 
@@ -255,7 +258,7 @@ export default function Stage() {
         {Array.from({ length: config.tiers }).map((_, i) => (
           <button
             key={i}
-            onClick={() => useCakeStore.getState().setSelectedTier(i)}
+            onClick={() => setSelectedTier(i)}
             className={`w-2 h-2 rounded-full transition-all duration-200
               ${config.selectedTier === i ? "w-5 bg-gold-400" : "bg-cream-300"}`}
           />

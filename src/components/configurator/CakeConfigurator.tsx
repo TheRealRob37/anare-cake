@@ -10,6 +10,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { useCakeStore } from "@/store/cakeStore";
 import { useI18n } from "@/lib/i18n";
 import { SPONGES, FILLINGS, FROSTINGS, TOPPINGS, SIZE_META } from "@/types/cake";
+import { TAB_PANEL } from "@/lib/motion";
 
 type Tab = "layers" | "toppings" | "personal";
 
@@ -25,7 +26,7 @@ export default function CakeConfigurator() {
   const { t } = useI18n();
 
   const TAB_LABELS: Record<Tab, string> = {
-    layers:   t.configurator.sponge,
+    layers:   t.configurator.layers,
     toppings: t.configurator.toppings,
     personal: t.configurator.message,
   };
@@ -86,38 +87,19 @@ export default function CakeConfigurator() {
           <div className="flex-1 overflow-y-auto p-4">
             <AnimatePresence mode="wait">
               {activeTab === "layers" && (
-                <motion.div
-                  key="layers"
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 12 }}
-                  transition={{ duration: 0.25 }}
-                >
+                <motion.div key="layers" {...TAB_PANEL}>
                   <LayerController />
                 </motion.div>
               )}
 
               {activeTab === "toppings" && (
-                <motion.div
-                  key="toppings"
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 12 }}
-                  transition={{ duration: 0.25 }}
-                >
+                <motion.div key="toppings" {...TAB_PANEL}>
                   <ToppingsEngine />
                 </motion.div>
               )}
 
               {activeTab === "personal" && (
-                <motion.div
-                  key="personal"
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 12 }}
-                  transition={{ duration: 0.25 }}
-                  className="space-y-6"
-                >
+                <motion.div key="personal" {...TAB_PANEL} className="space-y-6">
                   {/* Dedication message */}
                   <div className="space-y-2">
                     <label className="font-body text-xs font-semibold tracking-[0.12em] uppercase text-ink-500">
@@ -153,7 +135,7 @@ export default function CakeConfigurator() {
                   <div className="card-cream p-4 text-center space-y-2">
                     <p className="text-2xl">📸</p>
                     <p className="text-xs text-ink-500 leading-relaxed">
-                      Ձեր պատվերը հաստատվելու է Instagram-ի DM-ի միջոցով
+                      {t.configurator.instagram_note}
                     </p>
                     <a
                       href="https://instagram.com/anare_cake"
