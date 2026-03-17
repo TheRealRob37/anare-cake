@@ -6,16 +6,16 @@
 
 /* ─── CSS Custom Properties ─────────────────────────────────── */
 :root {
-  --color-cream-50:  #FFFDF9;
-  --color-cream-100: #FFF8EE;
-  --color-cream-200: #F9F0E1;
-  --color-cream-300: #F2E4C8;
-  --color-gold-200:  #E8CB8A;
-  --color-gold-300:  #D4A853;
-  --color-gold-400:  #B8862A;
-  --color-ink-900:   #1A1410;
-  --color-ink-700:   #3D2E26;
-  --color-ink-500:   #7A6458;
+  --color-cream-50:  #F5F7F4;
+  --color-cream-100: #ECF0EA;
+  --color-cream-200: #DCE4D8;
+  --color-cream-300: #C4D2BE;
+  --color-gold-200:  #AECFA4;
+  --color-gold-300:  #7DB572;
+  --color-gold-400:  #559049;
+  --color-ink-900:   #181C16;
+  --color-ink-700:   #2C3828;
+  --color-ink-500:   #586050;
 
   --radius-card: 1.5rem;
   --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5 {
 
 /* ─── Selection ──────────────────────────────────────────────── */
 ::selection {
-  background-color: var(--color-gold-200);
+  background-color: #D8EAD0;
   color: var(--color-ink-900);
 }
 
@@ -168,7 +168,7 @@ canvas.r3f {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(212,168,83,0.15) 50%,
+    rgba(125,181,114,0.18) 50%,
     transparent 100%
   );
   background-size: 200% 100%;

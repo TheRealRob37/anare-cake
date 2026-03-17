@@ -8,44 +8,52 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // ─── Anare Cake Design System ───────────────────────────────
+      // ─── Anare Cake Design System — Pistachio · Dirty Rose · Silver ───
       colors: {
-        // Backgrounds
+        // Backgrounds — light pistachio-silver tint (replaces cream)
         cream: {
-          50:  "#FFFDF9",
-          100: "#FFF8EE",
-          200: "#F9F0E1",
-          300: "#F2E4C8",
+          50:  "#F5F7F4",
+          100: "#ECF0EA",
+          200: "#DCE4D8",
+          300: "#C4D2BE",
         },
-        // Signature gold
+        // Primary accent — pistachio green (replaces gold)
         gold: {
-          100: "#F5E6C8",
-          200: "#E8CB8A",
-          300: "#D4A853",
-          400: "#B8862A",
-          500: "#9A6F1E",
+          100: "#D8EAD0",
+          200: "#AECFA4",
+          300: "#7DB572",
+          400: "#559049",
+          500: "#3A6B30",
         },
-        // Warm rose / blush
+        // Secondary accent — dirty rose (replaces blush)
         blush: {
-          100: "#FAF0EE",
-          200: "#F5D9D3",
-          300: "#EAB8B0",
-          400: "#D98F84",
+          100: "#F2E8E5",
+          200: "#E0C4BB",
+          300: "#C89888",
+          400: "#A86A5A",
         },
-        // Pastels for layer chips
-        pistachio: "#C8DBC2",
-        lavender:  "#D6CDE8",
-        caramel:   "#E8C89A",
-        chocolate: "#6B3D2E",
-        vanilla:   "#F5EDD6",
-        berry:     "#C2768A",
-        matcha:    "#A8C5A0",
-        // Text
+        // Neutral silver
+        silver: {
+          50:  "#F8F9FA",
+          100: "#EEF0F3",
+          200: "#D4D9E0",
+          300: "#A8B2BC",
+          400: "#6E8090",
+        },
+        // Pastels for layer chips (keep pistachio, update rest to match)
+        pistachio: "#AECFA4",
+        lavender:  "#C8C4DC",
+        caramel:   "#D8C0A0",
+        chocolate: "#5A3828",
+        vanilla:   "#EEE8D0",
+        berry:     "#B87888",
+        matcha:    "#90B888",
+        // Text — slightly cooler
         ink: {
-          900: "#1A1410",
-          700: "#3D2E26",
-          500: "#7A6458",
-          300: "#B5A89E",
+          900: "#181C16",
+          700: "#2C3828",
+          500: "#586050",
+          300: "#98A090",
         },
       },
 
@@ -73,25 +81,25 @@ const config: Config = {
       },
 
       boxShadow: {
-        "soft":   "0 2px 20px 0 rgba(180,140,80,0.08)",
-        "glow":   "0 0 40px 0 rgba(212,168,83,0.20)",
-        "card":   "0 4px 32px 0 rgba(90,60,30,0.10)",
-        "inset-gold": "inset 0 1px 0 rgba(212,168,83,0.30)",
+        "soft":       "0 2px 20px 0 rgba(80,140,70,0.08)",
+        "glow":       "0 0 40px 0 rgba(125,181,114,0.22)",
+        "card":       "0 4px 32px 0 rgba(40,80,30,0.10)",
+        "inset-gold": "inset 0 1px 0 rgba(125,181,114,0.30)",
       },
 
       backgroundImage: {
-        "grain":         "url('/noise.svg')",
-        "gold-gradient": "linear-gradient(135deg, #E8CB8A 0%, #D4A853 50%, #B8862A 100%)",
-        "cream-gradient":"linear-gradient(180deg, #FFFDF9 0%, #F9F0E1 100%)",
-        "hero-gradient": "radial-gradient(ellipse 80% 60% at 50% 0%, #F9F0E1 0%, #FFFDF9 100%)",
+        "grain":          "url('/noise.svg')",
+        "gold-gradient":  "linear-gradient(135deg, #AECFA4 0%, #7DB572 50%, #559049 100%)",
+        "cream-gradient": "linear-gradient(180deg, #F5F7F4 0%, #DCE4D8 100%)",
+        "hero-gradient":  "radial-gradient(ellipse 80% 60% at 50% 0%, #DCE4D8 0%, #F5F7F4 100%)",
       },
 
       animation: {
-        "float":      "float 6s ease-in-out infinite",
-        "shimmer":    "shimmer 2.5s linear infinite",
-        "fade-up":    "fadeUp 0.6s ease-out forwards",
-        "scale-in":   "scaleIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards",
-        "cake-spin":  "spin 20s linear infinite",
+        "float":     "float 6s ease-in-out infinite",
+        "shimmer":   "shimmer 2.5s linear infinite",
+        "fade-up":   "fadeUp 0.6s ease-out forwards",
+        "scale-in":  "scaleIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards",
+        "cake-spin": "spin 20s linear infinite",
       },
 
       keyframes: {

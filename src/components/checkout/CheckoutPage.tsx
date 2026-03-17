@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useId } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useCakeStore } from "@/store/cakeStore";
@@ -62,10 +63,23 @@ function ArcaIcon() {
 type PayMethod = "card" | "gpay" | "applepay";
 
 // ─── Main component ───────────────────────────────────────────────────────────
+// Minimum hours from now before a delivery can be scheduled
+const MIN_HOURS_AHEAD = 4;
+
+function minDeliveryDatetime(): string {
+  const d = new Date();
+  d.setHours(d.getHours() + MIN_HOURS_AHEAD);
+  // Round up to next half-hour
+  d.setMinutes(d.getMinutes() >= 30 ? 60 : 30, 0, 0);
+  // Format as datetime-local value (YYYY-MM-DDTHH:MM)
+  return d.toISOString().slice(0, 16);
+}
+
 export default function CheckoutPage() {
   const { config, price } = useCakeStore();
   const { t } = useI18n();
   const uid = useId();
+  const router = useRouter();
 
   // Contact
   const [name, setName]   = useState("");
@@ -73,7 +87,9 @@ export default function CheckoutPage() {
   const [email, setEmail] = useState("");
 
   // Delivery
-  const [address, setAddress] = useState("");
+  const [address, setAddress]           = useState("");
+  const [deliveryDate, setDeliveryDate] = useState(minDeliveryDatetime());
+  const [notes, setNotes]               = useState("");
 
   // Payment
   const [payMethod, setPayMethod] = useState<PayMethod>("card");
@@ -98,8 +114,12 @@ export default function CheckoutPage() {
   const sizeMeta     = SIZE_META[config.size];
 
   function validate(): boolean {
-    if (!name.trim() || !phone.trim() || !email.trim() || !address.trim()) {
+    if (!name.trim() || !phone.trim() || !address.trim() || !deliveryDate) {
       setError(t.checkout.error_required);
+      return false;
+    }
+    if (new Date(deliveryDate) <= new Date()) {
+      setError("Delivery date must be in the future.");
       return false;
     }
     if (payMethod === "card" && (!cardNumber.trim() || !cardExpiry.trim() || !cardCvv.trim() || !cardName.trim())) {
@@ -115,12 +135,38 @@ export default function CheckoutPage() {
     if (!validate()) return;
 
     setLoading(true);
-    // Simulate payment processing (replace with real gateway call)
-    await new Promise((r) => setTimeout(r, 2000));
-    const ref = `AC-${Date.now().toString(36).toUpperCase()}`;
-    setOrderRef(ref);
-    setLoading(false);
-    setSuccess(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cake_config:      config,
+          delivery_address: address,
+          delivery_date:    new Date(deliveryDate).toISOString(),
+          customer_name:    name,
+          customer_phone:   phone,
+          customer_email:   email || undefined,
+          notes:            notes || undefined,
+          total_price:      price.total,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error ?? "Failed to place order. Please try again.");
+        return;
+      }
+
+      setOrderRef(data.order.id);
+      setSuccess(true);
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (success) {
@@ -137,10 +183,19 @@ export default function CheckoutPage() {
             <h2 className="font-display text-2xl font-semibold text-ink-900">{t.checkout.success_title}</h2>
             <p className="font-body text-sm text-ink-500 leading-relaxed">{t.checkout.success_desc}</p>
           </div>
-          <div className="bg-cream-200 rounded-2xl px-5 py-3 text-sm font-mono text-ink-700">
-            {t.checkout.success_ref}: <span className="font-bold text-gold-400">{orderRef}</span>
+          <div className="bg-cream-200 rounded-2xl px-5 py-3 text-sm font-mono text-ink-700 text-left space-y-1">
+            <p>{t.checkout.success_ref}:</p>
+            <p className="font-bold text-gold-400 text-xs break-all">{orderRef}</p>
           </div>
-          <Link href="/" className="btn-gold w-full justify-center">← Home</Link>
+          <Link
+            href={`/track/${orderRef}`}
+            className="btn-gold w-full justify-center"
+          >
+            Track your order →
+          </Link>
+          <Link href="/" className="text-sm text-ink-400 hover:text-gold-400 transition-colors text-center">
+            ← Back to home
+          </Link>
         </motion.div>
       </div>
     );
@@ -203,6 +258,31 @@ export default function CheckoutPage() {
                   {yandexKey && (
                     <p className="text-[10px] text-ink-300">{t.checkout.map_click_hint}</p>
                   )}
+                  <Field id={`${uid}-date`} label="Delivery date & time">
+                    <input
+                      id={`${uid}-date`}
+                      type="datetime-local"
+                      value={deliveryDate}
+                      min={minDeliveryDatetime()}
+                      onChange={(e) => setDeliveryDate(e.target.value)}
+                      className="field-input"
+                      required
+                    />
+                    <p className="text-[10px] text-ink-300 mt-1">
+                      Minimum {MIN_HOURS_AHEAD} hours from now. We work 08:00–20:00.
+                    </p>
+                  </Field>
+                  <Field id={`${uid}-notes`} label="Notes for baker (optional)">
+                    <textarea
+                      id={`${uid}-notes`}
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="Allergies, special requests, building code…"
+                      className="field-input resize-none"
+                      rows={3}
+                      maxLength={500}
+                    />
+                  </Field>
                 </div>
               </Section>
 
