@@ -21,31 +21,56 @@ export default function CakeCutView() {
 
       <AnimatePresence mode="wait">
         {activeRecipe?.photoUrl ? (
-          /* ── Real recipe photo ─────────────────────────── */
+          /* ── Real recipe photo + description ───────────── */
           <motion.div
             key={activeRecipe.id}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full max-w-[260px] rounded-2xl overflow-hidden shadow-card border border-cream-200"
+            className="w-full max-w-[260px] flex flex-col gap-3"
           >
-            <img
-              src={activeRecipe.photoUrl}
-              alt={activeRecipe.label.en}
-              className="w-full object-cover"
-              style={{ aspectRatio: "2/3" }}
-            />
-            {/* Recipe name overlay */}
-            <div className="absolute bottom-0 inset-x-0 px-4 py-3"
-              style={{ background: "linear-gradient(to top, rgba(30,16,8,0.75) 0%, transparent 100%)" }}
-            >
-              <p className="font-display text-sm font-semibold text-cream-100 leading-tight">
-                {tl(activeRecipe.label)}
-              </p>
-              <p className="text-[10px] text-cream-200/70 mt-0.5">
-                anare — filling collection
-              </p>
+            {/* Photo */}
+            <div className="relative rounded-2xl overflow-hidden shadow-card border border-cream-200">
+              <img
+                src={activeRecipe.photoUrl}
+                alt={activeRecipe.label.en}
+                className="w-full object-cover"
+                style={{ aspectRatio: "2/3" }}
+              />
+              {/* Name overlay */}
+              <div className="absolute bottom-0 inset-x-0 px-4 py-3"
+                style={{ background: "linear-gradient(to top, rgba(30,16,8,0.75) 0%, transparent 100%)" }}
+              >
+                <p className="font-display text-sm font-semibold text-cream-100 leading-tight">
+                  {tl(activeRecipe.label)}
+                </p>
+                <p className="text-[10px] text-cream-200/70 mt-0.5">
+                  anare — filling collection
+                </p>
+              </div>
+            </div>
+
+            {/* Description card */}
+            <div className="card-cream rounded-2xl px-4 py-3 space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] font-semibold tracking-widest uppercase text-ink-400">Sponge</span>
+                <span className="flex-1 h-px bg-cream-200" />
+              </div>
+              <p className="text-xs font-medium text-ink-700">{activeRecipe.sponge}</p>
+
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-[9px] font-semibold tracking-widest uppercase text-ink-400">Layers</span>
+                <span className="flex-1 h-px bg-cream-200" />
+              </div>
+              <ul className="space-y-1">
+                {activeRecipe.ingredients.map((ing, i) => (
+                  <li key={i} className="flex items-start gap-2 text-[11px] text-ink-600">
+                    <span className="mt-1 w-1.5 h-1.5 rounded-full bg-gold-300 flex-shrink-0" />
+                    {ing}
+                  </li>
+                ))}
+              </ul>
             </div>
           </motion.div>
         ) : (

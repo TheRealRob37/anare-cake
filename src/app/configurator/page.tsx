@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import CakeConfigurator from "@/components/configurator/CakeConfigurator";
 
 export const metadata: Metadata = {
-  title: "Ձևավորել Տորթ — Design Your Cake",
-  description: "Ստեղծեք ձեր անհատական տորթը շերտ առ շերտ։ Ընտրեք բիսկվի, լցոնում, ծածկույթ ու զարդ։",
+  title: "Design Your Cake",
+  description: "Build your custom cake layer by layer — choose your recipe, frosting, and decorations.",
 };
 
 export default function ConfiguratorPage() {

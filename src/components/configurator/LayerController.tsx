@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useCakeStore } from "@/store/cakeStore";
-import { SPONGES, FILLINGS, FROSTINGS, SHAPES, CakeTiers, SIZE_META, FillingId } from "@/types/cake";
+import { FILLINGS, FROSTINGS, SHAPES, CakeTiers, SIZE_META, FillingId } from "@/types/cake";
 import { formatAMD } from "@/types/cake";
 import { useI18n } from "@/lib/i18n";
 import { TAP_SCALE } from "@/lib/motion";
@@ -12,7 +12,7 @@ const SELECTED = "border-gold-300 bg-gold-100 shadow-soft";
 const IDLE     = "border-cream-200 hover:border-gold-200";
 
 export default function LayerController() {
-  const { config, setSize, setTiers, setShape, setSponge, setRecipe, setFrosting } = useCakeStore();
+  const { config, setSize, setTiers, setShape, setRecipe, setFrosting } = useCakeStore();
   const { t, tl } = useI18n();
 
   return (
@@ -71,26 +71,6 @@ export default function LayerController() {
         </div>
       </Section>
 
-      {/* ── SPONGE ────────────────────────────────────────────────── */}
-      <Section label={t.configurator.sponge}>
-        <div className="grid grid-cols-3 gap-2">
-          {SPONGES.map((s) => (
-            <motion.button
-              key={s.id}
-              whileTap={{ scale: TAP_SCALE }}
-              onClick={() => setSponge(s.id)}
-              className={cn("layer-chip", config.sponge === s.id && "selected")}
-            >
-              <span className="w-8 h-8 rounded-xl border-2 border-white shadow-sm" style={{ backgroundColor: s.color }} />
-              <span className="text-[9px] font-medium text-ink-700 leading-tight text-center">{tl(s.label)}</span>
-              {s.pricePerTier > 0 && (
-                <span className="text-[8px] text-gold-400">+{formatAMD(s.pricePerTier)}</span>
-              )}
-            </motion.button>
-          ))}
-        </div>
-      </Section>
-
       {/* ── FILLINGS (signature recipes with photos) ──────────────── */}
       <Section label={t.configurator.fillings}>
         <div className="grid grid-cols-2 gap-2">
@@ -106,18 +86,8 @@ export default function LayerController() {
                   selected ? "border-gold-400 shadow-soft" : "border-cream-200 hover:border-gold-200"
                 )}
               >
-                {/* Photo thumbnail */}
-                {f.photoUrl ? (
-                  <div className="w-full h-20 overflow-hidden bg-cream-200">
-                    <img
-                      src={f.photoUrl}
-                      alt={f.label.en}
-                      className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-full h-20 flex-shrink-0" style={{ backgroundColor: f.color }} />
-                )}
+                {/* Color swatch */}
+                <div className="w-full h-14 flex-shrink-0" style={{ backgroundColor: f.color }} />
 
                 {/* Name + price */}
                 <div className="px-2.5 py-2 bg-cream-50">

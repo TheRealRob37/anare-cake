@@ -6,23 +6,23 @@ import { I18nProvider } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: {
-    default: "Anare Cake — Անհատական Տորթեր Երևանում",
+    default: "Anare Cake — Custom Cakes in Yerevan",
     template: "%s | Anare Cake",
   },
   description:
-    "Ձեռագործ շքեղ տորթեր Երևանում։ Անհատական պատվերներ, 3D կոնֆիգուրատոր, առաքում։ @anare_cake",
-  keywords: ["տորթ", "cake", "Երևան", "Yerevan", "custom cake", "бисквит", "торт на заказ"],
+    "Handcrafted luxury cakes in Yerevan. Custom orders, 3D cake configurator, delivery. @anare_cake",
+  keywords: ["cake", "Yerevan", "custom cake", "luxury cake", "wedding cake", "birthday cake", "Armenia"],
   authors: [{ name: "Anare Cake" }],
   creator: "Anare Cake",
   openGraph: {
     type: "website",
-    locale: "hy_AM",
+    locale: "en_US",
     siteName: "Anare Cake",
-    title: "Anare Cake — Անհատական Տորթեր",
-    description: "Ձեռագործ շքեղ տորթեր ձեր ամենաթանկ պահերի համար",
+    title: "Anare Cake — Custom Cakes in Yerevan",
+    description: "Handcrafted luxury cakes for your most precious moments",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/logo.jpg",
   },
 };
 

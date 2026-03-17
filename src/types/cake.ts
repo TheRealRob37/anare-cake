@@ -75,9 +75,11 @@ export type FillingId =
 export interface Filling {
   id: FillingId;
   label: I18nLabel;
-  color: string;       // representative hex — used in 3D SVG view
+  color: string;        // representative hex — used in 3D SVG view
   pricePerLayer: number; // AMD
-  photoUrl?: string;   // actual cross-section photo — shown in CakeCutView
+  photoUrl?: string;    // actual cross-section photo — shown in CakeCutView
+  sponge: string;       // sponge type used in this recipe
+  ingredients: string[]; // key filling layers (shown in cut-view description)
 }
 
 // ─── Frosting ─────────────────────────────────────────────────────────────────
@@ -179,20 +181,90 @@ export const SPONGES: Sponge[] = [
 ];
 
 export const FILLINGS: Filling[] = [
-  { id: "anare",          label: { hy: "Անarе",          en: "Anare",          ru: "Анарэ"          }, color: "#4A2218", pricePerLayer: 3500, photoUrl: "/fillings/anare.jpg"           },
-  { id: "armenia",        label: { hy: "Հայաստան",       en: "Armenia",        ru: "Армения"        }, color: "#C8943C", pricePerLayer: 3000, photoUrl: "/fillings/armenia.jpg"         },
-  { id: "banana_caramel", label: { hy: "Բanаn Կarаmel",  en: "Banana Caramel", ru: "Банан Карамель" }, color: "#D4924A", pricePerLayer: 3000, photoUrl: "/fillings/banana-caramel.jpg"  },
-  { id: "bianca",         label: { hy: "Bianka",          en: "Bianca",         ru: "Бьянка"         }, color: "#F0E8C8", pricePerLayer: 2800, photoUrl: "/fillings/bianca.jpg"          },
-  { id: "caramel_walnut", label: { hy: "Կarаmel Enkuyz", en: "Caramel Walnut", ru: "Карамель Орех"  }, color: "#C88A4C", pricePerLayer: 3200, photoUrl: "/fillings/caramel.jpg"         },
-  { id: "charlie",        label: { hy: "Charli",          en: "Charlie",        ru: "Чарли"          }, color: "#3D1F10", pricePerLayer: 3000, photoUrl: "/fillings/charlie.jpg"         },
-  { id: "cherry",         label: { hy: "Cherri",          en: "Cherry",         ru: "Черри"          }, color: "#7B1520", pricePerLayer: 3200, photoUrl: "/fillings/cherry.jpg"          },
-  { id: "choco_pistachio",label: { hy: "Shoko Pistakhy",  en: "Choco Pistachio",ru: "Шоко-Фисташка"  }, color: "#3D1F10", pricePerLayer: 3500, photoUrl: "/fillings/choco-pistachio.jpg" },
-  { id: "choco",          label: { hy: "Shoko",           en: "Choco",          ru: "Шоко"           }, color: "#4A2218", pricePerLayer: 2800, photoUrl: "/fillings/choco.jpg"           },
-  { id: "frozen",         label: { hy: "Frozen",          en: "Frozen",         ru: "Фрозен"         }, color: "#4A2218", pricePerLayer: 3500, photoUrl: "/fillings/frozen.jpg"          },
-  { id: "michelle",       label: { hy: "Michelle",        en: "Michelle",       ru: "Мишель"         }, color: "#3D1F10", pricePerLayer: 3200, photoUrl: "/fillings/michelle.jpg"        },
-  { id: "moana",          label: { hy: "Moana",           en: "Moana",          ru: "Моана"          }, color: "#3D1F10", pricePerLayer: 3000, photoUrl: "/fillings/moana.jpg"           },
-  { id: "pistachio",      label: { hy: "Pistakhy",        en: "Pistachio",      ru: "Фисташка"       }, color: "#C8DBC2", pricePerLayer: 3500, photoUrl: "/fillings/pistachio.jpg"       },
-  { id: "tropicana",      label: { hy: "Tropikana",       en: "Tropicana",      ru: "Тропикана"      }, color: "#F0C040", pricePerLayer: 3000, photoUrl: "/fillings/tropicana.jpg"       },
+  {
+    id: "anare", label: { hy: "Անarе", en: "Anare", ru: "Анарэ" },
+    color: "#4A2218", pricePerLayer: 3500, photoUrl: "/fillings/anare.jpg",
+    sponge: "Chocolate brownie",
+    ingredients: ["Cheese cream", "Fresh berries & berry confit", "Chocolate patisserie cream", "Caramel mousse, chocolate royaltine, walnut"],
+  },
+  {
+    id: "armenia", label: { hy: "Հայաստան", en: "Armenia", ru: "Армения" },
+    color: "#C8943C", pricePerLayer: 3000, photoUrl: "/fillings/armenia.jpg",
+    sponge: "Honey & walnut sponge",
+    ingredients: ["Cheese cream", "Sponge with dried fruits", "Caramel mousse"],
+  },
+  {
+    id: "banana_caramel", label: { hy: "Բananа Կaramеl", en: "Banana Caramel", ru: "Банан Карамель" },
+    color: "#D4924A", pricePerLayer: 3000, photoUrl: "/fillings/banana-caramel.jpg",
+    sponge: "Honey & walnut sponge",
+    ingredients: ["Salted caramel, banana", "Caramel cream", "Cheese cream"],
+  },
+  {
+    id: "bianca", label: { hy: "Բիanкa", en: "Bianca", ru: "Бьянка" },
+    color: "#F0E8C8", pricePerLayer: 2800, photoUrl: "/fillings/bianca.jpg",
+    sponge: "Vanilla",
+    ingredients: ["White plombir cream", "Fresh berries", "Cheese cream", "Royaltine, white chocolate"],
+  },
+  {
+    id: "caramel_walnut", label: { hy: "Կarаmеl Enkuyz", en: "Caramel Walnut", ru: "Карамель Орех" },
+    color: "#C88A4C", pricePerLayer: 3200, photoUrl: "/fillings/caramel.jpg",
+    sponge: "Vanilla",
+    ingredients: ["Walnut with salted caramel", "Caramel mousse", "Light cheese cream"],
+  },
+  {
+    id: "charlie", label: { hy: "Charli", en: "Charlie", ru: "Чарли" },
+    color: "#3D1F10", pricePerLayer: 3000, photoUrl: "/fillings/charlie.jpg",
+    sponge: "Chocolate",
+    ingredients: ["Caramel mousse with walnut", "Chocolate mousse", "Chocolate royaltine"],
+  },
+  {
+    id: "cherry", label: { hy: "Cherri", en: "Cherry", ru: "Черри" },
+    color: "#7B1520", pricePerLayer: 3200, photoUrl: "/fillings/cherry.jpg",
+    sponge: "Chocolate genoise",
+    ingredients: ["Plombir cream", "Cherry confit, drunk cherry", "Chocolate patisserie cream", "Savoiardi in cherry liquor"],
+  },
+  {
+    id: "choco_pistachio", label: { hy: "Shoko Pistakhy", en: "Choco Pistachio", ru: "Шоко-Фисташка" },
+    color: "#3D1F10", pricePerLayer: 3500, photoUrl: "/fillings/choco-pistachio.jpg",
+    sponge: "Chocolate brownie",
+    ingredients: ["Chocolate ganache & cream cheese", "Chocolate royaltine", "Bavarian cream", "Pistachio, white chocolate, dried raspberry"],
+  },
+  {
+    id: "choco", label: { hy: "Shoko", en: "Choco", ru: "Шоко" },
+    color: "#4A2218", pricePerLayer: 2800, photoUrl: "/fillings/choco.jpg",
+    sponge: "Chocolate brownie",
+    ingredients: ["Chocolate royaltine", "Chocolate ganache", "Milk chocolate mousse"],
+  },
+  {
+    id: "frozen", label: { hy: "Frozen", en: "Frozen", ru: "Фрозен" },
+    color: "#4A2218", pricePerLayer: 3500, photoUrl: "/fillings/frozen.jpg",
+    sponge: "Chocolate brownie",
+    ingredients: ["Chocolate cheese mousse", "Chocolate royaltine", "Ice cream", "Fresh berries & berry confit"],
+  },
+  {
+    id: "michelle", label: { hy: "Michelle", en: "Michelle", ru: "Мишель" },
+    color: "#3D1F10", pricePerLayer: 3200, photoUrl: "/fillings/michelle.jpg",
+    sponge: "Chocolate genoise",
+    ingredients: ["Chocolate mousse, royaltine, nuts", "Caramel mousse", "Cheese cream", "Walnut with salted caramel"],
+  },
+  {
+    id: "moana", label: { hy: "Moana", en: "Moana", ru: "Моана" },
+    color: "#3D1F10", pricePerLayer: 3000, photoUrl: "/fillings/moana.jpg",
+    sponge: "Chocolate genoise",
+    ingredients: ["Cheese cream, salted caramel", "Chocolate ganache", "Caramelized walnut"],
+  },
+  {
+    id: "pistachio", label: { hy: "Pistakhy", en: "Pistachio", ru: "Фисташка" },
+    color: "#C8DBC2", pricePerLayer: 3500, photoUrl: "/fillings/pistachio.jpg",
+    sponge: "Light vanilla",
+    ingredients: ["Raspberry", "Bavarian cream", "Fresh pistachio", "Pistachio mousse"],
+  },
+  {
+    id: "tropicana", label: { hy: "Tropikana", en: "Tropicana", ru: "Тропикана" },
+    color: "#F0C040", pricePerLayer: 3000, photoUrl: "/fillings/tropicana.jpg",
+    sponge: "Vanilla",
+    ingredients: ["Mango & passion fruit confit", "Mango & passion fruit mousse", "Bavarian cream"],
+  },
 ];
 
 export const FROSTINGS: Frosting[] = [

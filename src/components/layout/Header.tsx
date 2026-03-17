@@ -42,17 +42,9 @@ export default function Header() {
       >
         <div className="container-site h-16 flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2.5 flex-shrink-0">
-            <div className="w-9 h-9 rounded-xl overflow-hidden border border-cream-200 shadow-sm flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
-              <Image src="/logo.jpg" alt="Anare Cake" width={36} height={36} className="w-full h-full object-cover" />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span className="font-display text-xl font-semibold text-ink-900 tracking-tight group-hover:text-gold-400 transition-colors duration-300">
-                Anare
-              </span>
-              <span className="font-body text-[10px] font-medium tracking-[0.3em] uppercase text-gold-400">
-                Cake
-              </span>
+          <Link href="/" className="group flex-shrink-0" aria-label="Anare Cake — Home">
+            <div className="h-10 w-auto overflow-hidden rounded-xl border border-cream-200 shadow-sm transition-transform duration-300 group-hover:scale-105">
+              <Image src="/logo.jpg" alt="Anare Cake" width={80} height={40} className="h-full w-auto object-cover" />
             </div>
           </Link>
 

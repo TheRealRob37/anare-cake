@@ -231,7 +231,7 @@ function MessageOverlay({ message, fontFamily }: { message: string; fontFamily: 
 
 // ─── Stage ────────────────────────────────────────────────────────────────────
 export default function Stage() {
-  const { config, toggleCutView, toggleRotation, setSelectedTier } = useCakeStore();
+  const { config, toggleCutView, setSelectedTier } = useCakeStore();
   const { t } = useI18n();
 
   return (
@@ -247,13 +247,6 @@ export default function Stage() {
             }`}
         >
           {config.showCutView ? t.configurator.view3d : t.configurator.cutView}
-        </button>
-        <button
-          onClick={toggleRotation}
-          className="px-4 py-1.5 rounded-full text-xs font-medium bg-cream-100 text-ink-500
-                     border border-cream-200 hover:border-gold-200 transition-all duration-200"
-        >
-          {config.isRotating ? t.configurator.pause : t.configurator.rotate}
         </button>
       </div>
 
@@ -279,17 +272,9 @@ export default function Stage() {
               <motion.div
                 key="3d"
                 initial={{ opacity: 0, scale: 0.9 }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  rotate: config.isRotating ? [0, 360] : 0,
-                }}
+                animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                transition={
-                  config.isRotating
-                    ? { rotate: { duration: 24, repeat: Infinity, ease: "linear" }, opacity: { duration: 0.4 } }
-                    : { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
-                }
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="w-full h-full"
               >
                 <CakeSVG />
