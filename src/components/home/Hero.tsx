@@ -41,7 +41,7 @@ export default function Hero() {
 
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 40%, rgba(212,168,83,0.08) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 40%, rgba(125,181,114,0.10) 0%, transparent 70%)" }}
       />
 
       <div className="container-site text-center z-10 pt-24 pb-16">
@@ -82,20 +82,27 @@ export default function Hero() {
           <div className="relative w-64 h-64 sm:w-80 sm:h-80">
             <div className="absolute inset-4 rounded-full bg-gold-200/30 blur-3xl" />
             <svg viewBox="0 0 200 220" className="relative w-full h-full drop-shadow-2xl animate-float" fill="none">
-              <ellipse cx="100" cy="205" rx="80" ry="10" fill="#F2E4C8" />
-              <rect x="30" y="100" width="140" height="100" rx="4" fill="#F5EDD6" />
-              <path d="M30 108 Q50 95 70 108 Q90 95 110 108 Q130 95 150 108 Q165 97 170 108 V100 H30Z" fill="#FFF8EE" />
-              <rect x="30" y="145" width="140" height="10" fill="#F4C2C2" opacity="0.8" />
-              <rect x="55" y="50" width="90" height="55" rx="4" fill="#FFF8EE" />
-              <path d="M55 57 Q70 45 90 57 Q110 45 130 57 Q140 48 145 57 V50 H55Z" fill="#FFFFFF" />
-              <circle cx="100" cy="38" r="12" fill="#D4A853" />
-              <circle cx="100" cy="38" r="7"  fill="#E8CB8A" />
-              <text x="100" y="42" textAnchor="middle" fontSize="9" fill="#9A6F1E">✦</text>
-              <circle cx="70"  cy="48" r="5" fill="#C2768A" />
-              <circle cx="130" cy="48" r="5" fill="#C2768A" />
-              <circle cx="80"  cy="42" r="4" fill="#E8A0A0" />
-              <circle cx="120" cy="42" r="4" fill="#E8A0A0" />
-              <rect x="97" y="20" width="6" height="18" rx="2" fill="#F5EDD6" />
+              {/* Shadow */}
+              <ellipse cx="100" cy="205" rx="80" ry="10" fill="#C4D2BE" opacity="0.5" />
+              {/* Bottom tier */}
+              <rect x="30" y="100" width="140" height="100" rx="4" fill="#ECF0EA" />
+              <path d="M30 108 Q50 95 70 108 Q90 95 110 108 Q130 95 150 108 Q165 97 170 108 V100 H30Z" fill="#F5F7F4" />
+              {/* Filling stripe — dirty rose */}
+              <rect x="30" y="145" width="140" height="10" fill="#E0C4BB" opacity="0.9" />
+              {/* Top tier */}
+              <rect x="55" y="50" width="90" height="55" rx="4" fill="#F5F7F4" />
+              <path d="M55 57 Q70 45 90 57 Q110 45 130 57 Q140 48 145 57 V50 H55Z" fill="#fff" />
+              {/* Pistachio decoration */}
+              <circle cx="100" cy="38" r="12" fill="#7DB572" />
+              <circle cx="100" cy="38" r="7"  fill="#AECFA4" />
+              <text x="100" y="42" textAnchor="middle" fontSize="9" fill="#3A6B30">✦</text>
+              {/* Rose berries */}
+              <circle cx="70"  cy="48" r="5" fill="#A86A5A" />
+              <circle cx="130" cy="48" r="5" fill="#A86A5A" />
+              <circle cx="80"  cy="42" r="4" fill="#E0C4BB" />
+              <circle cx="120" cy="42" r="4" fill="#E0C4BB" />
+              {/* Candle */}
+              <rect x="97" y="20" width="6" height="18" rx="2" fill="#ECF0EA" />
               <ellipse cx="100" cy="18" rx="4" ry="6" fill="#FFD580" opacity="0.9" />
             </svg>
           </div>

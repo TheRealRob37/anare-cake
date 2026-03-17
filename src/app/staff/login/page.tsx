@@ -1,11 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { EASE_SMOOTH } from "@/lib/motion";
 
+// useSearchParams() requires Suspense in Next.js App Router
 export default function StaffLoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const from         = searchParams.get("from") ?? "/staff";
@@ -51,7 +60,6 @@ export default function StaffLoginPage() {
         transition={{ duration: 0.45, ease: EASE_SMOOTH }}
         className="card-cream p-10 w-full max-w-sm space-y-8"
       >
-        {/* Logo */}
         <div className="text-center space-y-2">
           <div className="w-16 h-16 rounded-full bg-gold-100 flex items-center justify-center mx-auto text-3xl">
             🎂

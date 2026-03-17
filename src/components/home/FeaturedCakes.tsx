@@ -185,8 +185,7 @@ export default function FeaturedCakes() {
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <button
                     onClick={() => handleOrder(cake.id)}
-                    className="text-xs font-semibold py-2 rounded-full text-white transition-all duration-200 hover:opacity-90 active:scale-95"
-                    style={{ background: "linear-gradient(135deg, #E8CB8A, #B8862A)" }}
+                    className="text-xs font-semibold py-2 rounded-full text-white bg-gold-gradient transition-all duration-200 hover:opacity-90 active:scale-95"
                   >
                     {t.menu.order}
                   </button>

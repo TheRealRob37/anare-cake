@@ -32,10 +32,7 @@ export default function SeasonalBanner() {
   const { t } = useI18n();
 
   return (
-    <section
-      className="relative py-20 overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #FAF0EE 0%, #F5D9D3 40%, #EAD6F0 100%)" }}
-    >
+    <section className="relative py-20 overflow-hidden bg-gradient-to-br from-blush-100 via-cream-200 to-silver-100">
       {/* Floating petal decorations */}
       {PETALS.map((petal, i) => (
         <motion.span
@@ -170,8 +167,7 @@ export default function SeasonalBanner() {
         >
           <Link
             href="/menu?filter=seasonal"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-medium text-sm text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-            style={{ background: "linear-gradient(135deg, #EAB8B0, #D98F84)" }}
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-medium text-sm text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg bg-gradient-to-r from-blush-300 to-blush-400"
           >
             {t.seasonal.cta} →
           </Link>

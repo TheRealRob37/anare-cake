@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
-import {
-  updateOrderStatus,
-  getOrderById,
-  NotFoundError,
-} from "@/services/orders";
+import { updateOrderStatus, getOrderById, NotFoundError } from "@/services/orders";
 import { UpdateOrderSchema } from "@/lib/validations/order";
+import { sendOrderConfirmedEmail, sendOrderDoneEmail } from "@/lib/email";
 
 // ─── GET /api/orders/:id ──────────────────────────────────────────────────────
 
@@ -32,9 +29,13 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const body = await req.json();
+    const body     = await req.json();
     const { status } = UpdateOrderSchema.parse(body);
-    const order = await updateOrderStatus(params.id, status);
+    const order    = await updateOrderStatus(params.id, status);
+
+    // Send email notifications on key status transitions
+    if (status === "confirmed") sendOrderConfirmedEmail(order);
+    if (status === "done")      sendOrderDoneEmail(order);
 
     return NextResponse.json({ order });
   } catch (err) {

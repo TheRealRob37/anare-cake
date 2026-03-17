@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { createOrder, getOrders, SlotFullError } from "@/services/orders";
-import {
-  CreateOrderSchema,
-  OrdersQuerySchema,
-} from "@/lib/validations/order";
+import { CreateOrderSchema, OrdersQuerySchema } from "@/lib/validations/order";
+import { sendOrderReceivedEmail } from "@/lib/email";
 
 // ─── GET /api/orders ──────────────────────────────────────────────────────────
 
@@ -34,9 +32,12 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body  = await req.json();
     const input = CreateOrderSchema.parse(body);
     const order = await createOrder(input);
+
+    // Fire-and-forget — don't block the response on email
+    sendOrderReceivedEmail(order);
 
     return NextResponse.json({ order }, { status: 201 });
   } catch (err) {
