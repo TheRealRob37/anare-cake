@@ -75,6 +75,26 @@ type UIStrings = {
     note: string;
   };
 
+  toppings_section: {
+    badge: string; title: string; subtitle: string;
+    pos_top: string; pos_side: string; pos_drip: string;
+  };
+
+  menu: {
+    badge: string; title: string; subtitle: string;
+    all: string; bestseller: string; premium: string; signature: string; seasonal: string;
+    from: string; order: string; customise: string;
+    count: string;
+  };
+
+  seasonal: {
+    badge: string; title: string; subtitle: string;
+    dates: string; cta: string;
+    item1_name: string; item1_desc: string;
+    item2_name: string; item2_desc: string;
+    item3_name: string; item3_desc: string;
+  };
+
   footer: {
     tagline: string; description: string;
     explore: string; order: string;
@@ -211,6 +231,41 @@ const STRINGS: Record<Locale, UIStrings> = {
       success_ref: "Պատվերի համար",
       error_required: "Լրացրեք բոլոր դաշտերը",
       note: "Ձեր պատվերը կհաստատվի Instagram DM @anare_cake-ի կամ էլ. փոստի միջոցով",
+    },
+    toppings_section: {
+      badge: "Զարդարանք",
+      title: "Ընտրեք Ձեր Զարդերը",
+      subtitle: "Պրեմիում հավելյալ զարդարանք ձեր տորթի համար",
+      pos_top: "Վերևում",
+      pos_side: "Կողքին",
+      pos_drip: "Կաթիլ",
+    },
+    menu: {
+      badge: "Մեր Հավաքածուն",
+      title: "Բոլոր Տորթերը",
+      subtitle: "Ընտրեք ձեր կատարյալ տորթը — կամ ձևավորեք ձեր սեփականը",
+      all: "Բոլորը",
+      bestseller: "Ամենավաճառ",
+      premium: "Պրեմիում",
+      signature: "Հեղինակային",
+      seasonal: "Սեզոնային",
+      from: "Սկսած",
+      order: "Պատվիրել",
+      customise: "Հարմարեցնել →",
+      count: "տորթ",
+    },
+    seasonal: {
+      badge: "Գարնանային Հավաքածու 2026",
+      title: "Ծաղկող Համերի",
+      subtitle: "Բացառիկ սեզոնային տորթեր թարմ գարնանային բաղադրիչներով",
+      dates: "Մարտ – Մայիս 2026",
+      cta: "Տեսնել Հավաքածուն",
+      item1_name: "Բալի Ծաղիկ Մաչա",
+      item1_desc: "Մաչայի բիսկվիտ, բալի ծաղկի կրեմ, յուզու",
+      item2_name: "Ելակ Լավանդա",
+      item2_desc: "Ելակի բիսկվիտ, լավանդայի մուս, մեղրի կրեմ",
+      item3_name: "Կիտրոն Բզեզ",
+      item3_desc: "Կիտրոնի բիսկվիտ, բզեզ-ծաղիկ կրեմ, ռոզ.",
     },
     footer: {
       tagline: "Սիրով ամեն շերտում",
@@ -351,6 +406,41 @@ const STRINGS: Record<Locale, UIStrings> = {
       error_required: "Please fill in all required fields",
       note: "Your order will be confirmed via Instagram DM @anare_cake or email",
     },
+    toppings_section: {
+      badge: "Decorations",
+      title: "Crown Your Cake",
+      subtitle: "Premium finishing touches that make every cake unforgettable",
+      pos_top: "Top",
+      pos_side: "Side",
+      pos_drip: "Drip",
+    },
+    menu: {
+      badge: "Our Collection",
+      title: "All Cakes",
+      subtitle: "Choose your perfect cake — or design your own from scratch",
+      all: "All",
+      bestseller: "Bestseller",
+      premium: "Premium",
+      signature: "Signature",
+      seasonal: "Seasonal",
+      from: "From",
+      order: "Order Now",
+      customise: "Customise →",
+      count: "cakes",
+    },
+    seasonal: {
+      badge: "Spring Collection 2026",
+      title: "Flavours in Bloom",
+      subtitle: "Limited edition cakes made with the freshest spring ingredients",
+      dates: "March – May 2026",
+      cta: "Shop Spring Collection",
+      item1_name: "Cherry Blossom Matcha",
+      item1_desc: "Matcha sponge, cherry blossom cream, yuzu curd",
+      item2_name: "Strawberry Lavender",
+      item2_desc: "Strawberry sponge, lavender mousse, honey cream",
+      item3_name: "Lemon Elderflower",
+      item3_desc: "Lemon sponge, elderflower cream, rose water glaze",
+    },
     footer: {
       tagline: "Made with love in every layer",
       description: "Handcrafted luxury cakes made to celebrate your most cherished moments — designed by you, perfected by us.",
@@ -489,6 +579,41 @@ const STRINGS: Record<Locale, UIStrings> = {
       success_ref: "Номер заказа",
       error_required: "Заполните все обязательные поля",
       note: "Заказ подтверждается через Instagram DM @anare_cake или email",
+    },
+    toppings_section: {
+      badge: "Украшения",
+      title: "Украсьте Ваш Торт",
+      subtitle: "Премиальные украшения, которые делают каждый торт незабываемым",
+      pos_top: "Сверху",
+      pos_side: "Сбоку",
+      pos_drip: "Потёк",
+    },
+    menu: {
+      badge: "Наша Коллекция",
+      title: "Все Торты",
+      subtitle: "Выберите идеальный торт — или создайте свой с нуля",
+      all: "Все",
+      bestseller: "Хиты продаж",
+      premium: "Премиум",
+      signature: "Фирменные",
+      seasonal: "Сезонные",
+      from: "От",
+      order: "Заказать",
+      customise: "Настроить →",
+      count: "торта",
+    },
+    seasonal: {
+      badge: "Весенняя Коллекция 2026",
+      title: "Вкусы в Цвету",
+      subtitle: "Лимитированные торты из самых свежих весенних ингредиентов",
+      dates: "Март – Май 2026",
+      cta: "Весенняя Коллекция",
+      item1_name: "Сакура Матча",
+      item1_desc: "Бисквит матча, крем из цветов вишни, юдзу курд",
+      item2_name: "Клубника и Лаванда",
+      item2_desc: "Клубничный бисквит, мусс из лаванды, медовый крем",
+      item3_name: "Лимон Бузина",
+      item3_desc: "Лимонный бисквит, крем из бузины, глазурь с розовой водой",
     },
     footer: {
       tagline: "С любовью в каждом слое",

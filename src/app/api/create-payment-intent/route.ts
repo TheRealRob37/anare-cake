@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
   }
 
-  const stripe = new Stripe(stripeKey, { apiVersion: "2024-06-20" });
+  const stripe = new Stripe(stripeKey, { apiVersion: "2026-02-25.clover" });
 
   const { amount, currency = "amd", metadata } = await req.json() as {
     amount: number;

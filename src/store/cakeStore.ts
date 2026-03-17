@@ -34,6 +34,14 @@ const DEFAULT_CONFIG: CakeConfig = {
   isRotating: true,
 };
 
+// ─── Standard Cake Configs ────────────────────────────────────────────────────
+const STANDARD_CAKES: Record<number, Partial<CakeConfig>> = {
+  1: { sponge: "vanilla", fillings: ["berry_compote"], frosting: "swiss_meringue", toppings: ["fresh_berries"] }, // rose lychee
+  2: { sponge: "vanilla", fillings: ["pistachio_cream"], frosting: "cream_cheese", toppings: ["gold_leaf"] }, // pistachio
+  3: { sponge: "chocolate", fillings: ["salted_caramel"], frosting: "mirror_glaze_gold", toppings: ["chocolate_drip"] }, // dark velvet
+  4: { sponge: "matcha", fillings: ["berry_compote"], frosting: "cream_cheese", toppings: ["edible_flowers"] }, // matcha sakura
+};
+
 // ─── Price Calculator ─────────────────────────────────────────────────────────
 function calculatePrice(config: CakeConfig): PriceBreakdown {
   const base = SIZE_BASE_PRICE[config.size];
@@ -89,6 +97,9 @@ interface CakeStore {
   setSelectedTier: (tier: number) => void;
   toggleRotation: () => void;
 
+  // Standard Cakes
+  setStandardCake: (id: number) => void;
+
   // Reset
   resetConfig: () => void;
 }
@@ -141,6 +152,12 @@ export const useCakeStore = create<CakeStore>()(
       toggleCutView:    () => update({ showCutView: !get().config.showCutView }),
       setSelectedTier:  (selectedTier) => update({ selectedTier }),
       toggleRotation:   () => update({ isRotating: !get().config.isRotating }),
+
+      // ── Standard Cakes ─────────────────────────────────────────
+      setStandardCake: (id) => {
+        const std = STANDARD_CAKES[id];
+        if (std) update(std);
+      },
 
       // ── Reset ──────────────────────────────────────────────────
       resetConfig: () => set({ config: DEFAULT_CONFIG, price: calculatePrice(DEFAULT_CONFIG) }),
