@@ -57,6 +57,14 @@ export default function CheckoutPage() {
       setError(t.checkout.error_required);
       return false;
     }
+    if (name.trim().length < 2) {
+      setError("Name must be at least 2 characters.");
+      return false;
+    }
+    if (address.trim().length < 10) {
+      setError("Address must be at least 10 characters. Please enter a full street address.");
+      return false;
+    }
     if (new Date(deliveryDate) <= new Date()) {
       setError("Delivery date must be in the future.");
       return false;
@@ -98,7 +106,12 @@ export default function CheckoutPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Failed to place order. Please try again.");
+        // Show the first field-level validation error if available
+        const fieldErrors = data.details?.fieldErrors;
+        const firstFieldError = fieldErrors
+          ? Object.entries(fieldErrors).map(([f, msgs]) => `${f}: ${(msgs as string[]).join(", ")}`)[0]
+          : null;
+        setError(firstFieldError ?? data.error ?? "Failed to place order. Please try again.");
         setPhase("form");
         return;
       }
@@ -236,30 +249,35 @@ export default function CheckoutPage() {
               <Section title={t.checkout.delivery_title}>
                 <div className="space-y-4">
                   {yandexKey ? (
-                    <YandexMapPicker
-                      apiKey={yandexKey}
-                      onSelect={(addr, coords) => {
-                        setAddress(addr);
-                        setDeliveryLat(coords[0]);
-                        setDeliveryLng(coords[1]);
-                      }}
-                    />
+                    <>
+                      <YandexMapPicker
+                        apiKey={yandexKey}
+                        onSelect={(addr, coords) => {
+                          setAddress(addr);
+                          setDeliveryLat(coords[0]);
+                          setDeliveryLng(coords[1]);
+                        }}
+                      />
+                      <p className="text-[10px] text-ink-300">{t.checkout.map_click_hint}</p>
+                    </>
                   ) : (
-                    <p className="text-[10px] text-ink-300 italic">{t.checkout.map_hint}</p>
+                    <div className="w-full h-44 rounded-2xl bg-cream-100 border border-cream-200 flex flex-col items-center justify-center gap-2 text-center px-4">
+                      <span className="text-3xl">🗺️</span>
+                      <p className="text-xs font-medium text-ink-600">Yandex Maps</p>
+                      <p className="text-[10px] text-ink-400 leading-relaxed max-w-xs">
+                        Set <code className="bg-cream-200 px-1 rounded text-[9px]">NEXT_PUBLIC_YANDEX_MAPS_KEY</code> in <code className="bg-cream-200 px-1 rounded text-[9px]">.env.local</code> to enable the map picker. Enter the address manually below.
+                      </p>
+                    </div>
                   )}
 
-                  <Field id={`${uid}-address`} label={t.checkout.address}>
+                  <Field id={`${uid}-address`} label={`${t.checkout.address} (full street address, 10+ chars)`}>
                     <input
                       id={`${uid}-address`} value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      placeholder={t.checkout.addressPlaceholder}
-                      className="field-input" required
+                      placeholder="e.g. Yerevan, Abovyan 1, apt. 42"
+                      className="field-input" required minLength={10}
                     />
                   </Field>
-
-                  {yandexKey && (
-                    <p className="text-[10px] text-ink-300">{t.checkout.map_click_hint}</p>
-                  )}
 
                   <Field id={`${uid}-date`} label="Delivery date & time">
                     <input

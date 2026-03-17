@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { Order, OrderStatus } from "@/types/order";
+import StaffNav from "@/components/staff/StaffNav";
 import {
   ORDER_STATUSES,
   STATUS_LABELS,
@@ -152,12 +153,13 @@ export default function StaffPage() {
       <div className="bg-white border-b border-cream-200 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="font-display text-2xl text-ink-900">Staff Dashboard</h1>
+            <h1 className="font-display text-2xl text-ink-900">📋 Manager Dashboard</h1>
             <p className="text-xs text-ink-400 mt-0.5">
               {activeCount} active order{activeCount !== 1 ? "s" : ""}
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <StaffNav />
             <span
               className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full ${
                 connected

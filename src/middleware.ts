@@ -5,7 +5,7 @@ const STAFF_COOKIE = "anare_staff_session";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Only protect /staff routes (not /staff/login itself)
+  // Protect all /staff routes except /staff/login
   if (pathname.startsWith("/staff") && !pathname.startsWith("/staff/login")) {
     const session = req.cookies.get(STAFF_COOKIE)?.value;
 
@@ -21,5 +21,7 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/staff/:path*"],
+  // Explicitly list /staff AND /staff/:path* — Next.js 14 :path* does not
+  // reliably match the bare /staff path without a trailing segment.
+  matcher: ["/staff", "/staff/:path+"],
 };

@@ -131,7 +131,13 @@ export async function createOrder(input: CreateOrderInput): Promise<Order & { is
   }
 
   // 3. Atomic customer upsert — builds CRM record
-  const customer = await upsertCustomer(input.customer_phone, input.customer_name);
+  // Fails gracefully if migration_001.sql hasn't been run yet (customers table missing)
+  let customer = { isLoyal: false };
+  try {
+    customer = await upsertCustomer(input.customer_phone, input.customer_name);
+  } catch (err) {
+    console.warn("[createOrder] Customer upsert skipped (run migration_001.sql):", err);
+  }
 
   // 4. Create the order
   const { data, error } = await supabase
