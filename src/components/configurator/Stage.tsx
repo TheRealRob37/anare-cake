@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCakeStore } from "@/store/cakeStore";
-import { SPONGES, FROSTINGS, TOPPINGS } from "@/types/cake";
+import { SPONGES, FROSTINGS, TOPPINGS, MESSAGE_FONTS } from "@/types/cake";
 import { useI18n } from "@/lib/i18n";
 import CakeCutView from "./CakeCutView";
 
@@ -185,6 +185,50 @@ function CakeSVG() {
   );
 }
 
+// ─── Animated Dedication Message Overlay ─────────────────────────────────────
+function MessageOverlay({ message, fontFamily }: { message: string; fontFamily: string }) {
+  if (!message.trim()) return null;
+
+  return (
+    <motion.div
+      key={message + fontFamily}
+      className="absolute inset-x-0 pointer-events-none z-20 flex justify-center"
+      style={{ bottom: "28%" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
+      {/* Frosted label band */}
+      <div className="relative px-4 py-1 rounded-full" style={{ background: "rgba(255,253,249,0.55)", backdropFilter: "blur(4px)" }}>
+        {/* Shimmer line */}
+        <motion.div
+          className="absolute inset-0 rounded-full overflow-hidden pointer-events-none"
+          initial={{ x: "-100%" }}
+          animate={{ x: "100%" }}
+          transition={{ duration: 1.2, delay: 0.2, ease: "easeInOut" }}
+        >
+          <div className="h-full w-1/2 bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+        </motion.div>
+
+        {/* Letters */}
+        <p className="relative text-center leading-none" style={{ fontFamily, fontSize: "clamp(11px, 3.5vw, 18px)", color: "#B8862A", textShadow: "0 1px 3px rgba(255,253,249,0.8)" }}>
+          {message.split("").map((char, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.045, duration: 0.25, ease: "easeOut" }}
+              style={{ display: char === " " ? "inline" : "inline-block" }}
+            >
+              {char === " " ? "\u00A0" : char}
+            </motion.span>
+          ))}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
 // ─── Stage ────────────────────────────────────────────────────────────────────
 export default function Stage() {
   const { config, toggleCutView, toggleRotation, setSelectedTier } = useCakeStore();
@@ -231,24 +275,30 @@ export default function Stage() {
               <CakeCutView />
             </motion.div>
           ) : (
-            <motion.div
-              key="3d"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                rotate: config.isRotating ? [0, 360] : 0,
-              }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={
-                config.isRotating
-                  ? { rotate: { duration: 24, repeat: Infinity, ease: "linear" }, opacity: { duration: 0.4 } }
-                  : { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
-              }
-              className="w-full max-w-xs h-72"
-            >
-              <CakeSVG />
-            </motion.div>
+            <div className="relative w-full max-w-xs h-72">
+              <motion.div
+                key="3d"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  rotate: config.isRotating ? [0, 360] : 0,
+                }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={
+                  config.isRotating
+                    ? { rotate: { duration: 24, repeat: Infinity, ease: "linear" }, opacity: { duration: 0.4 } }
+                    : { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+                }
+                className="w-full h-full"
+              >
+                <CakeSVG />
+              </motion.div>
+              <MessageOverlay
+                message={config.dedicationMessage}
+                fontFamily={MESSAGE_FONTS.find(f => f.id === config.messageFont)?.family ?? "'Dancing Script', cursive"}
+              />
+            </div>
           )}
         </AnimatePresence>
       </div>

@@ -2,6 +2,31 @@
 
 // Sizes in centimeters (metric)
 export type CakeSize = "10cm" | "15cm" | "20cm" | "25cm";
+
+// ─── Message Font ─────────────────────────────────────────────────────────────
+export type MessageFontId =
+  | "dancing_script"
+  | "great_vibes"
+  | "pacifico"
+  | "playfair"
+  | "sacramento"
+  | "pinyon";
+
+export interface MessageFont {
+  id: MessageFontId;
+  name: string;
+  family: string; // CSS font-family value
+  emoji: string;
+}
+
+export const MESSAGE_FONTS: MessageFont[] = [
+  { id: "dancing_script", name: "Dancing Script",   family: "'Dancing Script', cursive",    emoji: "✍️" },
+  { id: "great_vibes",    name: "Great Vibes",       family: "'Great Vibes', cursive",       emoji: "🌿" },
+  { id: "pacifico",       name: "Pacifico",          family: "'Pacifico', cursive",          emoji: "🌊" },
+  { id: "playfair",       name: "Playfair Display",  family: "'Playfair Display', serif",    emoji: "👑" },
+  { id: "sacramento",     name: "Sacramento",        family: "'Sacramento', cursive",        emoji: "🌸" },
+  { id: "pinyon",         name: "Pinyon Script",     family: "'Pinyon Script', cursive",     emoji: "🕊️" },
+];
 export type CakeTiers = 1 | 2 | 3;
 export type CakeShape = "round" | "heart" | "square";
 
@@ -118,6 +143,7 @@ export interface CakeConfig {
   frosting: FrostingId;
   toppings: ToppingId[];
   dedicationMessage: string;
+  messageFont: MessageFontId;
   servingDate: string;
   showCutView: boolean;
   selectedTier: number;

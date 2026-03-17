@@ -11,6 +11,7 @@ import {
   ToppingId,
   PriceBreakdown,
   InternalLayer,
+  MessageFontId,
   SPONGES,
   FILLINGS,
   FROSTINGS,
@@ -29,6 +30,7 @@ const DEFAULT_CONFIG: CakeConfig = {
   frosting: "swiss_meringue",
   toppings: [],
   dedicationMessage: "",
+  messageFont: "dancing_script" as MessageFontId,
   servingDate: "",
   showCutView: false,
   selectedTier: 0,
@@ -91,6 +93,7 @@ interface CakeStore {
 
   // Personalization
   setDedicationMessage: (msg: string) => void;
+  setMessageFont: (font: MessageFontId) => void;
   setServingDate: (date: string) => void;
 
   // View
@@ -147,6 +150,7 @@ export const useCakeStore = create<CakeStore>()(
 
       // ── Personalization ────────────────────────────────────────
       setDedicationMessage: (dedicationMessage) => update({ dedicationMessage }),
+      setMessageFont:       (messageFont: MessageFontId) => update({ messageFont }),
       setServingDate:       (servingDate)       => update({ servingDate }),
 
       // ── View ───────────────────────────────────────────────────

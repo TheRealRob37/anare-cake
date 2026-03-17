@@ -46,6 +46,7 @@ type UIStrings = {
     order: string; summary: string; total: string;
     serves: string; people: string;
     tier: string; tiers_word: string;
+    font: string;
     instagram_note: string;
   };
 
@@ -193,6 +194,7 @@ const STRINGS: Record<Locale, UIStrings> = {
       people: "հոգ.",
       tier: "Հարկ",
       tiers_word: "Հարկ",
+      font: "Տառատեսակ",
       instagram_note: "Ձեր պատվերը կհաստատվի Instagram DM @anare_cake-ի միջոցով",
     },
     price: {
@@ -368,6 +370,7 @@ const STRINGS: Record<Locale, UIStrings> = {
       people: "ppl",
       tier: "Tier",
       tiers_word: "Tiers",
+      font: "Message Font",
       instagram_note: "Your order will be confirmed via Instagram DM @anare_cake",
     },
     price: {
@@ -543,6 +546,7 @@ const STRINGS: Record<Locale, UIStrings> = {
       people: "чел.",
       tier: "Ярус",
       tiers_word: "Яруса",
+      font: "Шрифт Надписи",
       instagram_note: "Заказ подтверждается через Instagram DM @anare_cake",
     },
     price: {

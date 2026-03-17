@@ -9,7 +9,7 @@ import PriceCalculator from "./PriceCalculator";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useCakeStore } from "@/store/cakeStore";
 import { useI18n } from "@/lib/i18n";
-import { SPONGES, FILLINGS, FROSTINGS, TOPPINGS, SIZE_META } from "@/types/cake";
+import { SPONGES, FILLINGS, FROSTINGS, TOPPINGS, SIZE_META, MESSAGE_FONTS } from "@/types/cake";
 import { TAB_PANEL } from "@/lib/motion";
 
 type Tab = "layers" | "toppings" | "personal";
@@ -22,7 +22,7 @@ const TABS: { id: Tab; icon: string }[] = [
 
 export default function CakeConfigurator() {
   const [activeTab, setActiveTab] = useState<Tab>("layers");
-  const { config, setDedicationMessage, setServingDate, resetConfig } = useCakeStore();
+  const { config, setDedicationMessage, setMessageFont, setServingDate, resetConfig } = useCakeStore();
   const { t } = useI18n();
 
   const TAB_LABELS: Record<Tab, string> = {
@@ -113,7 +113,43 @@ export default function CakeConfigurator() {
                       className="w-full rounded-2xl border-2 border-cream-200 bg-cream-50 px-4 py-3
                                  text-sm text-ink-900 placeholder-ink-300 resize-none
                                  focus:outline-none focus:border-gold-300 transition-colors"
+                      style={{ fontFamily: MESSAGE_FONTS.find(f => f.id === config.messageFont)?.family }}
                     />
+
+                  {/* Font picker */}
+                  <div className="space-y-2">
+                    <label className="font-body text-xs font-semibold tracking-[0.12em] uppercase text-ink-500">
+                      {t.configurator.font}
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {MESSAGE_FONTS.map((font) => (
+                        <motion.button
+                          key={font.id}
+                          whileTap={{ scale: 0.96 }}
+                          onClick={() => setMessageFont(font.id)}
+                          className={`relative px-3 py-2.5 rounded-2xl border-2 text-left transition-all duration-200 overflow-hidden
+                            ${config.messageFont === font.id
+                              ? "border-gold-300 bg-gold-50 shadow-soft"
+                              : "border-cream-200 bg-cream-50 hover:border-gold-200"
+                            }`}
+                        >
+                          {config.messageFont === font.id && (
+                            <motion.span
+                              layoutId="font-indicator"
+                              className="absolute inset-0 bg-gold-100/60 rounded-2xl"
+                            />
+                          )}
+                          <span className="relative block text-[11px] text-ink-400 mb-1">{font.emoji} {font.name}</span>
+                          <span
+                            className="relative block text-sm text-ink-700 truncate"
+                            style={{ fontFamily: font.family }}
+                          >
+                            {config.dedicationMessage || t.configurator.messagePlaceholder.slice(0, 20)}
+                          </span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
                   </div>
 
                   {/* Serving date */}
