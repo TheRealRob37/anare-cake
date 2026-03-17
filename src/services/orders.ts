@@ -119,49 +119,62 @@ export async function createOrder(input: CreateOrderInput): Promise<Order & { is
 
   const deliveryDate = new Date(input.delivery_date);
 
-  // 1. Run the reaper first — clears ghost slots so capacity is accurate
-  await cancelExpiredOrders().catch(console.error);
+  // 1. Run the reaper — skip gracefully if migration_001.sql not yet applied
+  await cancelExpiredOrders().catch(() => {});
 
-  // 2. Check daily capacity
-  const available = await isDayAvailable(deliveryDate);
+  // 2. Check daily capacity — fall back to "available" if new columns don't exist yet
+  let available = true;
+  try {
+    available = await isDayAvailable(deliveryDate);
+  } catch {
+    console.warn("[createOrder] Capacity check skipped (run migration_001.sql)");
+  }
   if (!available) {
     throw new SlotFullError(
       `${deliveryDate.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })} is fully booked (${MAX_ORDERS_PER_DAY} orders). Please choose another date.`
     );
   }
 
-  // 3. Atomic customer upsert — builds CRM record
-  // Fails gracefully if migration_001.sql hasn't been run yet (customers table missing)
+  // 3. Customer upsert — skip gracefully if customers table doesn't exist yet
   let customer = { isLoyal: false };
   try {
     customer = await upsertCustomer(input.customer_phone, input.customer_name);
-  } catch (err) {
-    console.warn("[createOrder] Customer upsert skipped (run migration_001.sql):", err);
+  } catch {
+    console.warn("[createOrder] Customer upsert skipped (run migration_001.sql)");
   }
 
-  // 4. Create the order
-  const { data, error } = await supabase
-    .from("orders")
-    .insert({
-      cake_config:       input.cake_config,
-      delivery_address:  input.delivery_address,
-      delivery_lat:      input.delivery_lat ?? null,
-      delivery_lng:      input.delivery_lng ?? null,
-      delivery_date:     input.delivery_date,
-      customer_name:     input.customer_name,
-      customer_phone:    input.customer_phone,
-      customer_email:    input.customer_email ?? null,
-      notes:             input.notes ?? null,
-      total_price:       input.total_price,
-      complexity_score:  input.complexity_score ?? 0,
-      status:            "pending",
-    })
-    .select()
-    .single();
+  // 4. Create the order — try with new columns first, fall back to base schema
+  const baseInsert = {
+    cake_config:      input.cake_config,
+    delivery_address: input.delivery_address,
+    delivery_date:    input.delivery_date,
+    customer_name:    input.customer_name,
+    customer_phone:   input.customer_phone,
+    customer_email:   input.customer_email ?? null,
+    notes:            input.notes ?? null,
+    total_price:      input.total_price,
+    status:           "pending",
+  };
 
-  if (error) throw new Error(`Failed to create order: ${error.message}`);
+  // Attempt insert with new columns (requires migration_001.sql)
+  const fullInsert = {
+    ...baseInsert,
+    delivery_lat:     input.delivery_lat ?? null,
+    delivery_lng:     input.delivery_lng ?? null,
+    complexity_score: input.complexity_score ?? 0,
+  };
 
-  return { ...(data as Order), isLoyal: customer.isLoyal };
+  let result = await supabase.from("orders").insert(fullInsert).select().single();
+
+  // If new columns don't exist yet, retry with base schema only
+  if (result.error?.message?.includes("column")) {
+    console.warn("[createOrder] Falling back to base schema (run migration_001.sql)");
+    result = await supabase.from("orders").insert(baseInsert).select().single();
+  }
+
+  if (result.error) throw new Error(`Failed to create order: ${result.error.message}`);
+
+  return { ...(result.data as Order), isLoyal: customer.isLoyal };
 }
 
 export async function getOrders(query: OrdersQuery = {}): Promise<Order[]> {

@@ -36,13 +36,19 @@ export async function PATCH(
     const body       = await req.json();
     const { status } = UpdateOrderSchema.parse(body);
 
-    // When manually approving from staff dashboard → set the 15-minute payment window
+    // payment_expires_at column only exists after migration_001.sql
     const extra =
       status === "awaiting_payment"
         ? { payment_expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString() }
         : undefined;
 
-    const order = await updateOrderStatus(params.id, status, extra);
+    let order = await updateOrderStatus(params.id, status, extra).catch(async (err: Error) => {
+      // If the new status or column doesn't exist yet, retry without the extra fields
+      if (err.message.includes("column") || err.message.includes("invalid input value")) {
+        return updateOrderStatus(params.id, status);
+      }
+      throw err;
+    });
 
     // Email notifications on key status transitions
     if (status === "awaiting_payment") sendAwaitingPaymentEmail(order);
