@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useCakeStore } from "@/store/cakeStore";
-import { SPONGES, FILLINGS, FROSTINGS, SHAPES, CakeTiers, SIZE_META } from "@/types/cake";
+import { SPONGES, FILLINGS, FROSTINGS, SHAPES, CakeTiers, SIZE_META, FillingId } from "@/types/cake";
 import { formatAMD } from "@/types/cake";
 import { useI18n } from "@/lib/i18n";
 import { TAP_SCALE } from "@/lib/motion";
@@ -12,7 +12,7 @@ const SELECTED = "border-gold-300 bg-gold-100 shadow-soft";
 const IDLE     = "border-cream-200 hover:border-gold-200";
 
 export default function LayerController() {
-  const { config, setSize, setTiers, setShape, setSponge, toggleFilling, setFrosting } = useCakeStore();
+  const { config, setSize, setTiers, setShape, setSponge, setRecipe, setFrosting } = useCakeStore();
   const { t, tl } = useI18n();
 
   return (
@@ -91,24 +91,54 @@ export default function LayerController() {
         </div>
       </Section>
 
-      {/* ── FILLINGS ──────────────────────────────────────────────── */}
-      <Section label={t.configurator.fillings} hint={t.configurator.fillingsHint}>
+      {/* ── FILLINGS (signature recipes with photos) ──────────────── */}
+      <Section label={t.configurator.fillings}>
         <div className="grid grid-cols-2 gap-2">
-          {FILLINGS.map((f) => (
-            <motion.button
-              key={f.id}
-              whileTap={{ scale: TAP_SCALE }}
-              onClick={() => toggleFilling(f.id)}
-              className={cn("flex items-center gap-2.5 p-2.5 rounded-2xl border-2 text-left transition-all duration-200",
-                config.fillings.includes(f.id) ? SELECTED : IDLE)}
-            >
-              <span className="w-6 h-6 rounded-lg flex-shrink-0 border border-white shadow-sm" style={{ backgroundColor: f.color }} />
-              <div className="min-w-0">
-                <p className="text-[10px] font-medium text-ink-900 leading-tight truncate">{tl(f.label)}</p>
-                <p className="text-[9px] text-gold-400">+{formatAMD(f.pricePerLayer)}</p>
-              </div>
-            </motion.button>
-          ))}
+          {FILLINGS.map((f) => {
+            const selected = config.fillings[0] === f.id;
+            return (
+              <motion.button
+                key={f.id}
+                whileTap={{ scale: TAP_SCALE }}
+                onClick={() => setRecipe(f.id as FillingId)}
+                className={cn(
+                  "relative flex flex-col rounded-2xl border-2 overflow-hidden text-left transition-all duration-200",
+                  selected ? "border-gold-400 shadow-soft" : "border-cream-200 hover:border-gold-200"
+                )}
+              >
+                {/* Photo thumbnail */}
+                {f.photoUrl ? (
+                  <div className="w-full h-20 overflow-hidden bg-cream-200">
+                    <img
+                      src={f.photoUrl}
+                      alt={f.label.en}
+                      className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full h-20 flex-shrink-0" style={{ backgroundColor: f.color }} />
+                )}
+
+                {/* Name + price */}
+                <div className="px-2.5 py-2 bg-cream-50">
+                  <p className="text-[10px] font-semibold text-ink-900 leading-tight truncate">{tl(f.label)}</p>
+                  <p className="text-[9px] text-gold-400 mt-0.5">+{formatAMD(f.pricePerLayer)}</p>
+                </div>
+
+                {/* Selected checkmark */}
+                {selected && (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-gold-400 flex items-center justify-center text-[9px] text-white font-bold shadow"
+                  >
+                    ✓
+                  </motion.span>
+                )}
+              </motion.button>
+            );
+          })}
         </div>
       </Section>
 

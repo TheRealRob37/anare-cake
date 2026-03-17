@@ -57,20 +57,27 @@ export interface Sponge {
 
 // ─── Filling / Mousse ─────────────────────────────────────────────────────────
 export type FillingId =
-  | "strawberry_cream"
-  | "mango_mousse"
-  | "pistachio_cream"
-  | "dark_chocolate_ganache"
-  | "salted_caramel"
-  | "vanilla_custard"
-  | "berry_compote"
-  | "lavender_honey";
+  | "anare"
+  | "armenia"
+  | "banana_caramel"
+  | "bianca"
+  | "caramel_walnut"
+  | "charlie"
+  | "cherry"
+  | "choco_pistachio"
+  | "choco"
+  | "frozen"
+  | "michelle"
+  | "moana"
+  | "pistachio"
+  | "tropicana";
 
 export interface Filling {
   id: FillingId;
   label: I18nLabel;
-  color: string;
+  color: string;       // representative hex — used in 3D SVG view
   pricePerLayer: number; // AMD
+  photoUrl?: string;   // actual cross-section photo — shown in CakeCutView
 }
 
 // ─── Frosting ─────────────────────────────────────────────────────────────────
@@ -172,14 +179,20 @@ export const SPONGES: Sponge[] = [
 ];
 
 export const FILLINGS: Filling[] = [
-  { id: "strawberry_cream",       label: { hy: "Ելակի Կրեմ",        en: "Strawberry Cream",    ru: "Клубничный крем"   }, color: "#F4C2C2", pricePerLayer: 1500 },
-  { id: "mango_mousse",           label: { hy: "Մանգոյի Մուս",      en: "Mango Mousse",         ru: "Манговый мусс"     }, color: "#FFD580", pricePerLayer: 2000 },
-  { id: "pistachio_cream",        label: { hy: "Ֆիստաշկայի Կրեմ",  en: "Pistachio Cream",      ru: "Фисташковый крем"  }, color: "#C8DBC2", pricePerLayer: 2500 },
-  { id: "dark_chocolate_ganache", label: { hy: "Շոկոլադի Գանաշ",   en: "Chocolate Ganache",    ru: "Шоколадный ганаш"  }, color: "#3E1F10", pricePerLayer: 2200 },
-  { id: "salted_caramel",         label: { hy: "Աղի Կարամել",       en: "Salted Caramel",       ru: "Солёная карамель"  }, color: "#C88A4C", pricePerLayer: 2000 },
-  { id: "vanilla_custard",        label: { hy: "Վանիլի կրեմ",       en: "Vanilla Custard",      ru: "Ванильный крем"    }, color: "#FAF0C8", pricePerLayer: 1200 },
-  { id: "berry_compote",          label: { hy: "Հատապտուղ",         en: "Berry Compote",        ru: "Ягодный компот"    }, color: "#C2768A", pricePerLayer: 1800 },
-  { id: "lavender_honey",         label: { hy: "Լավանդա Ու Մեղր",  en: "Lavender Honey",       ru: "Лаванда с мёдом"   }, color: "#D6CDE8", pricePerLayer: 3000 },
+  { id: "anare",          label: { hy: "Անarе",          en: "Anare",          ru: "Анарэ"          }, color: "#4A2218", pricePerLayer: 3500, photoUrl: "/fillings/anare.jpg"           },
+  { id: "armenia",        label: { hy: "Հայաստան",       en: "Armenia",        ru: "Армения"        }, color: "#C8943C", pricePerLayer: 3000, photoUrl: "/fillings/armenia.jpg"         },
+  { id: "banana_caramel", label: { hy: "Բanаn Կarаmel",  en: "Banana Caramel", ru: "Банан Карамель" }, color: "#D4924A", pricePerLayer: 3000, photoUrl: "/fillings/banana-caramel.jpg"  },
+  { id: "bianca",         label: { hy: "Bianka",          en: "Bianca",         ru: "Бьянка"         }, color: "#F0E8C8", pricePerLayer: 2800, photoUrl: "/fillings/bianca.jpg"          },
+  { id: "caramel_walnut", label: { hy: "Կarаmel Enkuyz", en: "Caramel Walnut", ru: "Карамель Орех"  }, color: "#C88A4C", pricePerLayer: 3200, photoUrl: "/fillings/caramel.jpg"         },
+  { id: "charlie",        label: { hy: "Charli",          en: "Charlie",        ru: "Чарли"          }, color: "#3D1F10", pricePerLayer: 3000, photoUrl: "/fillings/charlie.jpg"         },
+  { id: "cherry",         label: { hy: "Cherri",          en: "Cherry",         ru: "Черри"          }, color: "#7B1520", pricePerLayer: 3200, photoUrl: "/fillings/cherry.jpg"          },
+  { id: "choco_pistachio",label: { hy: "Shoko Pistakhy",  en: "Choco Pistachio",ru: "Шоко-Фисташка"  }, color: "#3D1F10", pricePerLayer: 3500, photoUrl: "/fillings/choco-pistachio.jpg" },
+  { id: "choco",          label: { hy: "Shoko",           en: "Choco",          ru: "Шоко"           }, color: "#4A2218", pricePerLayer: 2800, photoUrl: "/fillings/choco.jpg"           },
+  { id: "frozen",         label: { hy: "Frozen",          en: "Frozen",         ru: "Фрозен"         }, color: "#4A2218", pricePerLayer: 3500, photoUrl: "/fillings/frozen.jpg"          },
+  { id: "michelle",       label: { hy: "Michelle",        en: "Michelle",       ru: "Мишель"         }, color: "#3D1F10", pricePerLayer: 3200, photoUrl: "/fillings/michelle.jpg"        },
+  { id: "moana",          label: { hy: "Moana",           en: "Moana",          ru: "Моана"          }, color: "#3D1F10", pricePerLayer: 3000, photoUrl: "/fillings/moana.jpg"           },
+  { id: "pistachio",      label: { hy: "Pistakhy",        en: "Pistachio",      ru: "Фисташка"       }, color: "#C8DBC2", pricePerLayer: 3500, photoUrl: "/fillings/pistachio.jpg"       },
+  { id: "tropicana",      label: { hy: "Tropikana",       en: "Tropicana",      ru: "Тропикана"      }, color: "#F0C040", pricePerLayer: 3000, photoUrl: "/fillings/tropicana.jpg"       },
 ];
 
 export const FROSTINGS: Frosting[] = [

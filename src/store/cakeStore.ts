@@ -26,7 +26,7 @@ const DEFAULT_CONFIG: CakeConfig = {
   tiers: 1,
   shape: "round",
   sponge: "vanilla",
-  fillings: ["strawberry_cream"],
+  fillings: ["anare"],
   frosting: "swiss_meringue",
   toppings: [],
   dedicationMessage: "",
@@ -39,10 +39,10 @@ const DEFAULT_CONFIG: CakeConfig = {
 
 // ─── Standard Cake Configs ────────────────────────────────────────────────────
 const STANDARD_CAKES: Record<number, Partial<CakeConfig>> = {
-  1: { sponge: "vanilla", fillings: ["berry_compote"], frosting: "swiss_meringue", toppings: ["fresh_berries"] }, // rose lychee
-  2: { sponge: "vanilla", fillings: ["pistachio_cream"], frosting: "cream_cheese", toppings: ["gold_leaf"] }, // pistachio
-  3: { sponge: "chocolate", fillings: ["salted_caramel"], frosting: "mirror_glaze_gold", toppings: ["chocolate_drip"] }, // dark velvet
-  4: { sponge: "matcha", fillings: ["berry_compote"], frosting: "cream_cheese", toppings: ["edible_flowers"] }, // matcha sakura
+  1: { sponge: "vanilla",    fillings: ["bianca"],    frosting: "swiss_meringue",    toppings: ["fresh_berries"]  }, // rose lychee
+  2: { sponge: "vanilla",    fillings: ["pistachio"], frosting: "cream_cheese",       toppings: ["gold_leaf"]      }, // pistachio royale
+  3: { sponge: "chocolate",  fillings: ["charlie"],   frosting: "mirror_glaze_gold", toppings: ["chocolate_drip"] }, // dark velvet
+  4: { sponge: "matcha",     fillings: ["tropicana"], frosting: "cream_cheese",       toppings: ["edible_flowers"] }, // matcha sakura
 };
 
 // ─── Price Calculator ─────────────────────────────────────────────────────────
@@ -92,6 +92,7 @@ interface CakeStore {
   toggleTopping: (id: ToppingId) => void;
 
   // Personalization
+  setRecipe: (id: FillingId) => void;
   setDedicationMessage: (msg: string) => void;
   setMessageFont: (font: MessageFontId) => void;
   setServingDate: (date: string) => void;
@@ -128,6 +129,8 @@ export const useCakeStore = create<CakeStore>()(
       // ── Flavors ────────────────────────────────────────────────
       setSponge:   (sponge)   => update({ sponge }),
       setFrosting: (frosting) => update({ frosting }),
+
+      setRecipe: (id) => update({ fillings: [id] }),
 
       toggleFilling: (id) => {
         const current = get().config.fillings;
@@ -182,7 +185,7 @@ export const selectInternalLayers = (config: CakeConfig): InternalLayer[] => {
   layers.push({ type: "sponge" as const,   color: spongeData.color,   label: spongeData.label.en,   heightPx: 40 });
   fillingsData.forEach((f) => {
     if (f) {
-      layers.push({ type: "filling" as const,  color: f.color,            label: f.label.en,            heightPx: 24 });
+      layers.push({ type: "filling" as const,  color: f.color,            label: f.label.en,            heightPx: 24, imageUrl: f.photoUrl });
       layers.push({ type: "sponge"  as const,  color: spongeData.color,   label: spongeData.label.en,   heightPx: 40 });
     }
   });
