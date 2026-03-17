@@ -1,40 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getOrderById, updateOrderStatus, NotFoundError } from "@/services/orders";
-import { sendOrderConfirmedEmail } from "@/lib/email";
+import { NextResponse } from "next/server";
 
-// POST /api/orders/:id/pay
-// Called after the customer completes payment on the tracking page.
-// In production, integrate real payment gateway here before updating status.
+// POST /api/orders/:id/pay — DEPRECATED
+//
+// This endpoint is no longer the authoritative payment confirmation path.
+// Payment is now confirmed exclusively via the Stripe webhook:
+//   POST /api/webhooks/stripe
+//
+// The webhook uses stripe.webhooks.constructEvent() to verify the Stripe
+// signature before moving an order from awaiting_payment → confirmed.
+//
+// Keeping this route alive returns a clear error so any old client code
+// fails loudly rather than silently passing unverified payments through.
 
-export async function POST(
-  _req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const order = await getOrderById(params.id);
-
-    if (!order) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
-    }
-
-    if (order.status !== "confirmed") {
-      return NextResponse.json(
-        { error: `Payment not available — order status is "${order.status}". Order must be confirmed first.` },
-        { status: 409 }
-      );
-    }
-
-    // TODO: Integrate real payment gateway here (Stripe, IDBank, etc.)
-    // const paymentResult = await processPayment(body.paymentToken, order.total_price);
-    // if (!paymentResult.success) return NextResponse.json({ error: "Payment failed" }, { status: 402 });
-
-    const updated = await updateOrderStatus(params.id, "in_progress");
-    return NextResponse.json({ order: updated });
-  } catch (err) {
-    if (err instanceof NotFoundError) {
-      return NextResponse.json({ error: err.message }, { status: 404 });
-    }
-    console.error("[POST /api/orders/:id/pay]", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  }
+export async function POST() {
+  return NextResponse.json(
+    {
+      error:
+        "This endpoint is deprecated. Payment is confirmed automatically via the Stripe webhook. " +
+        "Use POST /api/webhooks/stripe.",
+    },
+    { status: 410 } // 410 Gone
+  );
 }

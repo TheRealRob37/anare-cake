@@ -5,12 +5,27 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { Order, OrderStatus } from "@/types/order";
-import { ORDER_STATUSES, STATUS_LABELS, STATUS_COLORS } from "@/types/order";
+import { STATUS_LABELS, STATUS_COLORS } from "@/types/order";
 import { formatAMD } from "@/types/cake";
 import { motion, AnimatePresence } from "framer-motion";
 import { EASE_SMOOTH } from "@/lib/motion";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// Progress bar shows the "forward" statuses only — cancelled is handled separately
+const PROGRESS_STATUSES: OrderStatus[] = [
+  "pending",
+  "awaiting_payment",
+  "confirmed",
+  "in_progress",
+  "ready",
+  "delivering",
+  "done",
+];
+
+const STATUS_STEP = Object.fromEntries(
+  PROGRESS_STATUSES.map((s, i) => [s, i])
+) as Record<OrderStatus, number>;
 
 function formatDateTime(iso: string) {
   return new Date(iso).toLocaleString("en-GB", {
@@ -26,10 +41,6 @@ function formatExpiry(raw: string) {
   const d = raw.replace(/\D/g, "").slice(0, 4);
   return d.length >= 3 ? d.slice(0, 2) + "/" + d.slice(2) : d;
 }
-
-const STATUS_STEP = Object.fromEntries(
-  ORDER_STATUSES.map((s, i) => [s, i])
-) as Record<OrderStatus, number>;
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -98,7 +109,8 @@ export default function TrackPage() {
     </div>
   );
 
-  const step = STATUS_STEP[order.status];
+  // cancelled is not in PROGRESS_STATUSES — clamp to 0 so the bar doesn't break
+  const step = STATUS_STEP[order.status] ?? 0;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cfg  = order.cake_config as any;
 
@@ -131,7 +143,7 @@ export default function TrackPage() {
           {/* Progress */}
           <div className="relative pt-2">
             <div className="flex justify-between mb-6">
-              {ORDER_STATUSES.map((s, i) => (
+              {PROGRESS_STATUSES.map((s, i) => (
                 <div key={s} className="flex flex-col items-center gap-1.5 flex-1">
                   <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${
                     i < step  ? "bg-gold-400 border-gold-400" :
@@ -155,25 +167,27 @@ export default function TrackPage() {
             <div className="absolute top-5 left-3 right-3 h-0.5 bg-cream-200 -z-10">
               <div
                 className="h-full bg-gold-400 transition-all duration-700 rounded-full"
-                style={{ width: `${(step / (ORDER_STATUSES.length - 1)) * 100}%` }}
+                style={{ width: `${(step / (PROGRESS_STATUSES.length - 1)) * 100}%` }}
               />
             </div>
           </div>
 
           {/* Status message */}
           <p className="text-xs text-ink-500 text-center leading-relaxed">
-            {order.status === "pending"     && "⏳ Your order is being reviewed by our team…"}
-            {order.status === "confirmed"   && "✅ Order confirmed! Please complete your payment below."}
-            {order.status === "in_progress" && "👩‍🍳 Your cake is being baked with love!"}
-            {order.status === "ready"       && "📦 Your cake is ready and waiting for delivery!"}
-            {order.status === "delivering"  && "🚗 Your cake is on its way to you!"}
-            {order.status === "done"        && "🎉 Delivered! Enjoy every slice!"}
+            {order.status === "pending"          && "⏳ Your order is being reviewed by our team…"}
+            {order.status === "awaiting_payment" && "💳 Approved! Please complete payment within 15 minutes to secure your slot."}
+            {order.status === "confirmed"        && "✅ Payment received! Your cake is next in the baking queue."}
+            {order.status === "in_progress"      && "👩‍🍳 Your cake is being baked with love!"}
+            {order.status === "ready"            && "📦 Your cake is ready and waiting for delivery!"}
+            {order.status === "delivering"       && "🚗 Your cake is on its way to you!"}
+            {order.status === "done"             && "🎉 Delivered! Enjoy every slice!"}
+            {order.status === "cancelled"        && "❌ This order was cancelled. Please contact us to reorder."}
           </p>
         </div>
 
-        {/* Payment section — only when confirmed */}
+        {/* Payment section — shown when awaiting_payment (Telegram approved, 15-min window) */}
         <AnimatePresence>
-          {order.status === "confirmed" && (
+          {order.status === "awaiting_payment" && (
             <motion.div
               key="payment"
               initial={{ opacity: 0, y: 20 }}

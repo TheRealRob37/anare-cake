@@ -88,7 +88,42 @@ export async function sendOrderReceivedEmail(order: Order) {
   }).catch(console.error);
 }
 
-// ─── 2. Order confirmed — pay now (sent when staff confirms) ──────────────────
+// ─── 2. Awaiting payment (sent when Telegram bot approves — 15-min window) ────
+
+export async function sendAwaitingPaymentEmail(order: Order) {
+  if (!order.customer_email) return;
+  const resend = getResend();
+  if (!resend) return;
+
+  const trackUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001"}/track/${order.id}`;
+  const expiresAt = order.payment_expires_at
+    ? new Date(order.payment_expires_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+    : "soon";
+
+  await resend.emails.send({
+    from:    FROM,
+    to:      order.customer_email,
+    subject: `⏳ Your cake is approved — pay within 15 minutes`,
+    html: baseLayout(`
+      <div class="header">
+        <h1>⏳ Approved! Pay now</h1>
+        <p>Your slot is reserved for 15 minutes — don't miss it!</p>
+      </div>
+      <div class="body">
+        <h2>Great news, ${order.customer_name}!</h2>
+        <p>Our manager approved your cake order. <strong>Please complete payment by ${expiresAt}</strong> to lock in your delivery date. After that, your slot will open up for other customers.</p>
+        ${orderRows(order)}
+        <p style="text-align:center;margin-top:8px;">
+          <a href="${trackUrl}" class="btn">Pay now →</a>
+        </p>
+        <p style="font-size:12px;color:#98A090;">This link expires at ${expiresAt}. If you miss it, please contact us to reorder.</p>
+      </div>
+      <div class="footer">Anare Cake · Yerevan, Armenia · anarecake.am</div>
+    `),
+  }).catch(console.error);
+}
+
+// ─── 3. Order confirmed — baking starts (sent after Stripe webhook fires) ─────
 
 export async function sendOrderConfirmedEmail(order: Order) {
   if (!order.customer_email) return;

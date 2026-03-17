@@ -14,6 +14,8 @@ export const CreateOrderSchema = z.object({
     .string()
     .trim()
     .min(10, "Address must be at least 10 characters"),
+  delivery_lat: z.number().optional(),
+  delivery_lng: z.number().optional(),
   delivery_date: z
     .string()
     .refine((v) => !isNaN(Date.parse(v)), "delivery_date must be a valid datetime")
@@ -37,6 +39,7 @@ export const CreateOrderSchema = z.object({
     .number()
     .int("total_price must be an integer")
     .positive("total_price must be positive"),
+  complexity_score: z.number().int().min(0).max(10).optional(),
 });
 
 export type CreateOrderInput = z.infer<typeof CreateOrderSchema>;

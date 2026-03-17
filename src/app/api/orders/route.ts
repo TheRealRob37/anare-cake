@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import { createOrder, getOrders, SlotFullError } from "@/services/orders";
 import { CreateOrderSchema, OrdersQuerySchema } from "@/lib/validations/order";
 import { sendOrderReceivedEmail } from "@/lib/email";
+import { notifyNewOrder } from "@/bot/telegram";
 
 // ─── GET /api/orders ──────────────────────────────────────────────────────────
 
@@ -36,8 +37,9 @@ export async function POST(req: NextRequest) {
     const input = CreateOrderSchema.parse(body);
     const order = await createOrder(input);
 
-    // Fire-and-forget — don't block the response on email
+    // Fire-and-forget — don't block the response
     sendOrderReceivedEmail(order);
+    notifyNewOrder(order).catch(console.error); // Telegram manager notification
 
     return NextResponse.json({ order }, { status: 201 });
   } catch (err) {

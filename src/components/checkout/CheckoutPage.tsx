@@ -37,6 +37,8 @@ export default function CheckoutPage() {
 
   // Delivery
   const [address, setAddress]           = useState("");
+  const [deliveryLat, setDeliveryLat]   = useState<number | null>(null);
+  const [deliveryLng, setDeliveryLng]   = useState<number | null>(null);
   const [deliveryDate, setDeliveryDate] = useState(minDeliveryDatetime());
   const [notes, setNotes]               = useState("");
 
@@ -77,7 +79,14 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           cake_config:      config,
           delivery_address: address,
+          delivery_lat:     deliveryLat ?? undefined,
+          delivery_lng:     deliveryLng ?? undefined,
           delivery_date:    new Date(deliveryDate).toISOString(),
+          complexity_score: Math.round(
+            (config.tiers === 3 ? 5 : config.tiers === 2 ? 3 : 0) +
+            Math.min(config.toppings.length, 3) +
+            (config.size === "25cm" ? 2 : 0)
+          ),
           customer_name:    name,
           customer_phone:   phone,
           customer_email:   email || undefined,
@@ -227,7 +236,14 @@ export default function CheckoutPage() {
               <Section title={t.checkout.delivery_title}>
                 <div className="space-y-4">
                   {yandexKey ? (
-                    <YandexMapPicker apiKey={yandexKey} onSelect={(addr) => setAddress(addr)} />
+                    <YandexMapPicker
+                      apiKey={yandexKey}
+                      onSelect={(addr, coords) => {
+                        setAddress(addr);
+                        setDeliveryLat(coords[0]);
+                        setDeliveryLng(coords[1]);
+                      }}
+                    />
                   ) : (
                     <p className="text-[10px] text-ink-300 italic">{t.checkout.map_hint}</p>
                   )}
